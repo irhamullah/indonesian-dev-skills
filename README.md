@@ -1,6 +1,6 @@
 # Indonesian Developer Skills
 
-Skill bundle untuk workflow khas Indonesian developers. Original skills yang tidak overlap dengan superpowers, omo, atau agent-skills.
+Skill bundle untuk workflow khas Indonesian developers. Setiap skill fokus pada pain point implementasi yang spesifik untuk ekosistem Indonesia.
 
 ## 🇮🇩 Why This Bundle?
 
@@ -176,16 +176,16 @@ git clone https://github.com/irhamullah/indonesian-dev-skills ~/test-skills
 4. **Maintainable** - Clear abstraction layers, easy to extend
 5. **Well-documented** - Examples, references, troubleshooting guides
 
-## 🆚 Comparison with Other Bundles
+## 🆚 What Makes This Different
 
-| Bundle | Focus | Overlap with Indonesian Dev Skills |
-|--------|-------|-----------------------------------|
-| **superpowers** | Process & discipline (TDD, debugging, brainstorming) | ❌ No overlap |
-| **omo** | Multi-model orchestration, LSP/AST tooling | ❌ No overlap |
-| **agent-skills** | Domain expertise (security, performance, observability) | ❌ No overlap |
-| **indonesian-dev-skills** | Indonesian developer workflows | ✅ This bundle |
+| Aspect | Typical skill bundles | Indonesian Dev Skills |
+|--------|----------------------|----------------------|
+| **Focus** | General software practices | Indonesian-specific implementations |
+| **Scope** | Framework-agnostic patterns | Deep on local ecosystem (payment, hosting, data) |
+| **Examples** | Abstract concepts | Production-ready, Indonesia-context |
+| **Coverage** | Broad & shallow | Narrow & deep |
 
-**Key differentiator:** Kami fokus ke **implementation-specific workflows khas Indonesia**, bukan general development practices.
+**Key differentiator:** Kami fokus ke **implementation-specific workflows khas Indonesia** — bukan general development practices.
 
 ## 🤝 Contributing
 
@@ -206,7 +206,7 @@ Contributions welcome! Punya pain point Indonesian developer lain yang belum ada
 - ✅ Skill harus **specific ke Indonesia**
 - ✅ Include working code examples
 - ✅ Add testing guide
-- ✅ No overlap dengan existing skills (superpowers/omo/agent-skills)
+- ✅ Fokus pada pain point Indonesia (bukan duplikasi general practices)
 - ✅ Production-ready quality
 
 ## 📝 License
@@ -218,9 +218,8 @@ MIT License - Free to use, modify, and distribute.
 Created by Indonesian developers, for Indonesian developers.
 
 Special thanks to:
-- [superpowers](https://github.com/obra/superpowers) for workflow inspiration
-- [oh-my-openagent](https://github.com/meistrari/oh-my-openagent) for tooling patterns
 - Indonesian developer community for pain point feedback
+- Everyone who contributed ideas, reviews, and testing
 
 ## 📮 Support
 

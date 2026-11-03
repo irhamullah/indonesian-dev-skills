@@ -31,13 +31,7 @@ Edit `~/.config/opencode/opencode.jsonc`:
 ```json
 {
   "skills": [
-    "~/.config/opencode/agent-skills/skills",
     "~/.config/opencode/indonesian-dev-skills/skills"
-  ],
-  "plugins": [
-    "oh-my-openagent@latest",
-    "envsitter-guard@latest",
-    "superpowers@git+https://github.com/obra/superpowers.git"
   ]
 }
 ```
@@ -123,8 +117,8 @@ Skill `payment-gateway-indonesia` should be loaded automatically.
 When multiple skills could apply, Indonesian Developer Skills has **domain-specific** priority for Indonesian workflows:
 
 1. If task mentions **Indonesian payment providers** (Midtrans/Xendit/Doku) → `payment-gateway-indonesia` first
-2. If task mentions **API design** generically → `api-and-interface-design` (from agent-skills)
-3. If task mentions **security** → `security-and-hardening` (from agent-skills)
+2. If task mentions **VPS/hosting/cPanel** → `hosting-deployment-indonesia` first
+3. If task mentions **NIK/NPWP/wilayah/ongkir/Rupiah** → `indonesian-data-forms` first
 
 Example:
 ```
@@ -133,7 +127,6 @@ Example:
 Priority:
 1. payment-gateway-indonesia (Indonesia-specific implementation)
 2. api-and-interface-design (general API patterns)
-3. security-and-hardening (webhook security)
 ```
 
 ---

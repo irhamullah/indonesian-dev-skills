@@ -121,7 +121,7 @@ Structure:
 ## 🎓 What Makes This Special
 
 ### 1. Original, Not Derivative
-- ✅ Zero overlap dengan superpowers/omo/agent-skills
+- ✅ 100% original, dibuat dari pain point nyata Indonesian developers
 - ✅ Solve Indonesia-specific problems
 - ✅ Not repackaged existing work
 

@@ -10,7 +10,7 @@ Skills that solve **pain points unique to Indonesian developers**:
 - ✅ Local provider workflows (hosting, cloud, SaaS)
 - ✅ Indonesian data formats and validation
 - ✅ Compliance with Indonesian regulations
-- ❌ General development practices (already covered by superpowers/omo/agent-skills)
+- ❌ General development practices (diluar scope bundle ini)
 
 ## How to Contribute
 

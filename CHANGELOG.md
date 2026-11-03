@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-11-03
+
+### Added
+- **Notifikasi Indonesia** skill
+  - Unified `NotificationProvider` interface (WhatsApp, Telegram, Email)
+  - WhatsApp gateway adapters: Fonnte, Wablas, Watzap, Meta Cloud API (official)
+  - Telegram Bot API integration (internal alerts, inline buttons)
+  - Email transaksional: Gmail SMTP, Resend, deliverability (SPF/DKIM/DMARC)
+  - OTP flow: crypto-secure, hashed, rate-limited, single-use
+  - Message templates multi-channel + opt-in tracking
+  - Provider comparison & migration path (unofficial → official)
+  - 5 reference guides: WhatsApp gateway, Telegram bot, email notification, OTP & templates, provider comparison
+
 ## [1.2.0] - 2026-11-03
 
 ### Added
@@ -47,7 +60,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive testing guides
 - Security best practices
 
-[Unreleased]: https://github.com/irhamullah/indonesian-dev-skills/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/irhamullah/indonesian-dev-skills/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/irhamullah/indonesian-dev-skills/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/irhamullah/indonesian-dev-skills/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/irhamullah/indonesian-dev-skills/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/irhamullah/indonesian-dev-skills/releases/tag/v1.0.0

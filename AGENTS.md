@@ -11,6 +11,7 @@ Copy tabel di bawah ini ke `~/.config/opencode/AGENTS.md`, tambahkan ke section 
 | Payment gateway Indonesia: Midtrans, Xendit, Doku, QRIS, Virtual Account, e-wallet (GoPay, OVO, DANA, ShopeePay), webhook verification, payment integration | `payment-gateway-indonesia` |
 | Deploy Laravel/Node.js, VPS Indonesia (IDCloudHost, Niagahoster, Rumahweb, Biznet Gio), Nginx, Supervisor queue worker, SSL Let's Encrypt, database backup, cPanel shared hosting, zero-downtime deployment | `hosting-deployment-indonesia` |
 | Validasi NIK/NPWP, wilayah administratif (provinsi/kota/kecamatan/kelurahan), format nomor HP (+62), ongkir (RajaOngkir/Biteship), format Rupiah, timezone WIB/WITA/WIT | `indonesian-data-forms` |
+| Kirim notifikasi WhatsApp/Telegram/Email, WA gateway (Fonnte, Wablas, Watzap, Meta Cloud API), Telegram Bot, OTP WhatsApp, email transaksional, alert server | `notifikasi-indonesia` |
 
 ---
 
@@ -51,6 +52,7 @@ cat >> ~/.config/opencode/AGENTS.md << 'EOF'
 | Payment gateway Indonesia: Midtrans, Xendit, Doku, QRIS, Virtual Account, e-wallet (GoPay, OVO, DANA, ShopeePay), webhook verification, payment integration | `payment-gateway-indonesia` |
 | Deploy Laravel/Node.js, VPS Indonesia (IDCloudHost, Niagahoster, Rumahweb, Biznet Gio), Nginx, Supervisor queue worker, SSL Let's Encrypt, database backup, cPanel shared hosting, zero-downtime deployment | `hosting-deployment-indonesia` |
 | Validasi NIK/NPWP, wilayah administratif (provinsi/kota/kecamatan/kelurahan), format nomor HP (+62), ongkir (RajaOngkir/Biteship), format Rupiah, timezone WIB/WITA/WIT | `indonesian-data-forms` |
+| Kirim notifikasi WhatsApp/Telegram/Email, WA gateway (Fonnte, Wablas, Watzap, Meta Cloud API), Telegram Bot, OTP WhatsApp, email transaksional, alert server | `notifikasi-indonesia` |
 <!-- /indonesian-dev-skills -->
 EOF
 ```
@@ -119,6 +121,7 @@ When multiple skills could apply, Indonesian Developer Skills has **domain-speci
 1. If task mentions **Indonesian payment providers** (Midtrans/Xendit/Doku) → `payment-gateway-indonesia` first
 2. If task mentions **VPS/hosting/cPanel** → `hosting-deployment-indonesia` first
 3. If task mentions **NIK/NPWP/wilayah/ongkir/Rupiah** → `indonesian-data-forms` first
+4. If task mentions **WhatsApp/Telegram/OTP/notifikasi** → `notifikasi-indonesia` first
 
 Example:
 ```
@@ -236,6 +239,9 @@ All skills complete:
 
 ### 3. Indonesian Data & Forms ✅
 **Trigger:** "Validasi NIK", "Dropdown provinsi/kota", "Format nomor HP Indonesia"
+
+### 4. Notifikasi Indonesia ✅
+**Trigger:** "Kirim OTP WhatsApp", "Notifikasi Telegram", "WA gateway Fonnte", "Email transaksional"
 
 **Want to contribute a new skill?** See CONTRIBUTING.md
 

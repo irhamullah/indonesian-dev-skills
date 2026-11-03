@@ -8,6 +8,7 @@ Indonesian developers punya pain points unik:
 - Payment gateway lokal (Midtrans, Xendit, Doku) dengan format berbeda-beda
 - Deploy di VPS lokal (Biznet Gio, IDCloudHost, Niagahoster)
 - Data Indonesia (provinsi/kota, NIK/NPWP validation, format Rupiah)
+- Notifikasi via WhatsApp/Telegram (WhatsApp gateway berbeda-beda + OTP yang aman)
 
 Skill bundle ini solve masalah-masalah yang **specific ke Indonesia** dan belum ada di skill bundle lain.
 
@@ -99,6 +100,35 @@ Wilayah administratif, validasi identitas, format data khas Indonesia.
 - `references/rupiah-formatting.md` - Currency handling
 - `references/timezone-indonesia.md` - WIB/WITA/WIT
 
+### 4. Notifikasi Indonesia ✅
+
+**Status:** Complete
+
+Kirim notifikasi via WhatsApp, Telegram, dan Email — channel yang benar-benar dipakai user Indonesia.
+
+**Solves:**
+- ✅ WhatsApp gateway berbeda-beda (Fonnte, Wablas, Watzap, Meta Cloud API)
+- ✅ Unified interface WhatsApp/Telegram/Email
+- ✅ OTP flow yang aman
+- ✅ Alert internal ke Telegram
+- ✅ Email transaksional & deliverability
+- ✅ Multi-channel fallback
+
+**Use when:**
+- Kirim OTP via WhatsApp
+- Notifikasi transaksi ke customer
+- Alert server ke Telegram/WhatsApp
+- Email transaksional (invoice, reset password)
+
+**Files:**
+- `SKILL.md` - Main workflow (channel abstraction + OTP)
+- `examples.md` - Complete adapters (Fonnte, Wablas, Watzap, Meta, Telegram, Email)
+- `references/whatsapp-gateway.md` - WA gateway guide
+- `references/telegram-bot.md` - Telegram Bot API
+- `references/email-notification.md` - SMTP/Gmail/transactional
+- `references/otp-and-templates.md` - OTP flow & templates
+- `references/provider-comparison.md` - Perbandingan & rekomendasi
+
 ## 🚀 Installation
 
 ### Option 1: Direct Install (Recommended)
@@ -168,6 +198,33 @@ git clone https://github.com/irhamullah/indonesian-dev-skills ~/test-skills
 → See references/sandbox-setup.md
 ```
 
+### Notifikasi WhatsApp / Telegram / Email
+
+```typescript
+// Trigger: "kirim OTP via WhatsApp"
+// or: "alert server ke Telegram", "email invoice transaksional"
+
+// Skill akan guide kamu:
+// 1. Define unified NotificationProvider interface
+// 2. Implement adapter (Fonnte/Wablas/Watzap/Meta, Telegram, Email)
+// 3. OTP flow aman (crypto-secure, hashed, rate-limited)
+// 4. Multi-channel fallback
+```
+
+```bash
+# Pilih WA gateway (official vs unofficial)?
+→ See references/provider-comparison.md
+
+# Setup Fonnte/Wablas/Watzap/Meta Cloud API?
+→ See references/whatsapp-gateway.md
+
+# Alert server ke Telegram?
+→ See references/telegram-bot.md
+
+# OTP flow & template?
+→ See references/otp-and-templates.md
+```
+
 ## 🎯 Design Principles
 
 1. **Original, not derivative** - Tidak copy/repackage existing skills
@@ -181,7 +238,7 @@ git clone https://github.com/irhamullah/indonesian-dev-skills ~/test-skills
 | Aspect | Typical skill bundles | Indonesian Dev Skills |
 |--------|----------------------|----------------------|
 | **Focus** | General software practices | Indonesian-specific implementations |
-| **Scope** | Framework-agnostic patterns | Deep on local ecosystem (payment, hosting, data) |
+| **Scope** | Framework-agnostic patterns | Deep on local ecosystem (payment, hosting, data, notifikasi) |
 | **Examples** | Abstract concepts | Production-ready, Indonesia-context |
 | **Coverage** | Broad & shallow | Narrow & deep |
 

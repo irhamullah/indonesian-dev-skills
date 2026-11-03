@@ -39,31 +39,65 @@ Integrasi payment gateway lokal (Midtrans, Xendit, Doku) dengan unified normaliz
 - `references/status-mapping.md` - Complete status mapping table
 - `references/sandbox-setup.md` - Testing guide
 
-### 2. VPS Deployment Indonesia 🚧
+### 2. Hosting & Deployment Indonesia ✅
 
-**Status:** Planned
+**Status:** Complete
 
-Setup Laravel/Node.js di VPS lokal (Biznet Gio, IDCloudHost, Niagahoster).
+Deploy Laravel/Node.js ke VPS lokal (IDCloudHost, Niagahoster, Rumahweb, Biznet Gio) atau shared hosting cPanel.
 
-**Will solve:**
-- Nginx configuration
-- SSL setup (Let's Encrypt)
-- Queue worker dengan Supervisor
-- Database backup automation
-- Basic hardening
+**Solves:**
+- ✅ Supervisor queue worker config (selalu lupa config)
+- ✅ SSL Let's Encrypt + auto-renewal (renewal gagal)
+- ✅ Nginx reverse proxy untuk Node.js (WebSocket tricky)
+- ✅ Database backup automation (sering skip)
+- ✅ Initial server setup & hardening (lupa urutan)
+- ✅ Zero-downtime deployment (deploy bikin down)
+- ✅ cPanel shared hosting deployment
 
-### 3. Indonesian Data & Forms 🚧
+**Use when:**
+- Deploy Laravel/Node.js ke VPS Indonesia
+- Setup Nginx, SSL, Supervisor
+- Deploy ke shared hosting cPanel
 
-**Status:** Planned
+**Files:**
+- `SKILL.md` - Main workflow (VPS + cPanel)
+- `references/supervisor-config.md` - Queue worker setup
+- `references/ssl-letsencrypt.md` - SSL setup & troubleshooting
+- `references/nginx-reverse-proxy.md` - Reverse proxy Node.js
+- `references/database-backup.md` - Backup automation
+- `references/initial-server-setup.md` - Server hardening
+- `references/zero-downtime-deployment.md` - Deploy strategies
+- `references/cpanel-deployment.md` - Shared hosting guide
 
-Wilayah administratif, validation, dan format khas Indonesia.
+### 3. Indonesian Data & Forms ✅
 
-**Will solve:**
-- Provinsi/kota/kecamatan/kelurahan data
-- NIK & NPWP validation
-- Format nomor HP (+62)
-- Ongkir integration (RajaOngkir, Biteship)
+**Status:** Complete
+
+Wilayah administratif, validasi identitas, format data khas Indonesia.
+
+**Solves:**
+- ✅ Wilayah administratif data (provinsi → kelurahan, sering outdated)
+- ✅ NIK & NPWP validation (gampang salah)
+- ✅ Format nomor HP (+62 normalization)
+- ✅ Ongkir integration (RajaOngkir, Biteship)
+- ✅ Format Rupiah (float error handling)
+- ✅ Timezone WIB/WITA/WIT
+
+**Use when:**
+- Form alamat dengan dropdown wilayah
+- Validasi NIK/NPWP
+- Normalize nomor HP Indonesia
+- Cek ongkir
 - Format Rupiah
+
+**Files:**
+- `SKILL.md` - Main workflow
+- `references/wilayah-administratif.md` - Data wilayah strategy
+- `references/nik-npwp-validation.md` - Identity validation
+- `references/phone-formatting.md` - Phone normalization
+- `references/ongkir-integration.md` - Shipping cost integration
+- `references/rupiah-formatting.md` - Currency handling
+- `references/timezone-indonesia.md` - WIB/WITA/WIT
 
 ## 🚀 Installation
 

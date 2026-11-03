@@ -9,6 +9,8 @@ Copy tabel di bawah ini ke `~/.config/opencode/AGENTS.md`, tambahkan ke section 
 | Intent / trigger | Skill |
 | --- | --- |
 | Payment gateway Indonesia: Midtrans, Xendit, Doku, QRIS, Virtual Account, e-wallet (GoPay, OVO, DANA, ShopeePay), webhook verification, payment integration | `payment-gateway-indonesia` |
+| Deploy Laravel/Node.js, VPS Indonesia (IDCloudHost, Niagahoster, Rumahweb, Biznet Gio), Nginx, Supervisor queue worker, SSL Let's Encrypt, database backup, cPanel shared hosting, zero-downtime deployment | `hosting-deployment-indonesia` |
+| Validasi NIK/NPWP, wilayah administratif (provinsi/kota/kecamatan/kelurahan), format nomor HP (+62), ongkir (RajaOngkir/Biteship), format Rupiah, timezone WIB/WITA/WIT | `indonesian-data-forms` |
 
 ---
 
@@ -53,6 +55,8 @@ cat >> ~/.config/opencode/AGENTS.md << 'EOF'
 | Intent / trigger | Skill |
 | --- | --- |
 | Payment gateway Indonesia: Midtrans, Xendit, Doku, QRIS, Virtual Account, e-wallet (GoPay, OVO, DANA, ShopeePay), webhook verification, payment integration | `payment-gateway-indonesia` |
+| Deploy Laravel/Node.js, VPS Indonesia (IDCloudHost, Niagahoster, Rumahweb, Biznet Gio), Nginx, Supervisor queue worker, SSL Let's Encrypt, database backup, cPanel shared hosting, zero-downtime deployment | `hosting-deployment-indonesia` |
+| Validasi NIK/NPWP, wilayah administratif (provinsi/kota/kecamatan/kelurahan), format nomor HP (+62), ongkir (RajaOngkir/Biteship), format Rupiah, timezone WIB/WITA/WIT | `indonesian-data-forms` |
 <!-- /indonesian-dev-skills -->
 EOF
 ```
@@ -227,17 +231,20 @@ git pull origin main
 
 ---
 
-## Next Skills (Roadmap)
+## Skills Overview
 
-Following skills planned for Indonesian Developer Skills bundle:
+All skills complete:
 
-### VPS Deployment Indonesia
-**Trigger:** "Deploy Laravel ke Biznet Gio", "Setup Nginx di IDCloudHost"
+### 1. Payment Gateway Indonesia ✅
+**Trigger:** "Setup Midtrans", "Integrasi QRIS", "Webhook Xendit"
 
-### Indonesian Data & Forms
+### 2. Hosting & Deployment Indonesia ✅
+**Trigger:** "Deploy Laravel ke IDCloudHost", "Setup Nginx", "Konfigurasi Supervisor"
+
+### 3. Indonesian Data & Forms ✅
 **Trigger:** "Validasi NIK", "Dropdown provinsi/kota", "Format nomor HP Indonesia"
 
-**Want to contribute?** See CONTRIBUTING.md
+**Want to contribute a new skill?** See CONTRIBUTING.md
 
 ---
 

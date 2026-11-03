@@ -7,9 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Planned
-- VPS Deployment Indonesia skill
-- Indonesian Data & Forms skill
+## [1.2.0] - 2026-11-03
+
+### Added
+- **Indonesian Data & Forms** skill
+  - Wilayah administratif data strategy
+  - NIK & NPWP validation
+  - Phone number formatting (+62)
+  - Ongkir integration (RajaOngkir, Biteship)
+  - Rupiah formatting & money handling
+  - Timezone WIB/WITA/WIT
+
+## [1.1.0] - 2026-11-03
+
+### Added
+- **Hosting & Deployment Indonesia** skill
+  - Complete VPS deployment workflow (Laravel & Node.js)
+  - cPanel shared hosting workflow
+  - 7 reference guides: Supervisor, SSL Let's Encrypt, Nginx reverse proxy, database backup, initial server setup, zero-downtime deployment, cPanel
 
 ## [1.0.0] - 2026-11-03
 
@@ -32,5 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive testing guides
 - Security best practices
 
-[Unreleased]: https://github.com/irhamullah/indonesian-dev-skills/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/irhamullah/indonesian-dev-skills/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/irhamullah/indonesian-dev-skills/compare/v1.1.0...v1.2.0
+[1.1.0]: https://github.com/irhamullah/indonesian-dev-skills/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/irhamullah/indonesian-dev-skills/releases/tag/v1.0.0

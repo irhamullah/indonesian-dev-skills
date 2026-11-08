@@ -358,3 +358,9 @@ if (isValidNIK(req.body.nik) && validateNIKServer(req.body.nik)) { save(); }
 - `api-and-interface-design` - Untuk design validation interface
 - `security-and-hardening` - Untuk PII data handling (NIK = sensitive)
 - `performance-optimization` - Untuk optimize wilayah data loading
+- `data-resmi-indonesia` - **Data resmi & aturan berperiode Indonesia**:
+  - Hari libur nasional / cuti bersama / hari kerja → `data-resmi-indonesia`
+  - Kurs BI & JISDOR → `data-resmi-indonesia`
+  - UMP / upah minimum → `data-resmi-indonesia`
+  - Aturan pajak (PTKP, PPh 21 TER, PPN) & BPJS → `data-resmi-indonesia`
+  - Wilayah administratif, kode pos, NIK/NPWP, ongkir, Rupiah, timezone **tetap di skill ini**

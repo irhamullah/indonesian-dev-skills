@@ -15,6 +15,10 @@
 
 ---
 
+> 🇮🇩 **Pembaca Indonesia:** README ini dalam **bahasa Inggris**. Versi **Bahasa Indonesia tersedia di → [README.md](README.md)**.
+
+---
+
 ## Why This Bundle?
 
 Indonesian developers face **unique pain points** that generic skill bundles don't cover:

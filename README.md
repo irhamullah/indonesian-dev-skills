@@ -15,6 +15,10 @@
 
 ---
 
+> 🌏 **International readers:** This README is written in **Bahasa Indonesia**. A complete **English version is available → [README.en.md](README.en.md)**.
+
+---
+
 ## Kenapa Bundle Ini?
 
 Developer Indonesia menghadapi **pain point unik** yang tidak dicakup skill bundle umum:

@@ -5,7 +5,16 @@ All notable changes to Indonesian Developer Skills will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.4.0] - 2026-11-08
+
+### Added
+- **Data Resmi Indonesia** skill (#5)
+  - Data resmi Indonesia: BMKG (gempa/prakiraan cuaca/peringatan dini), BPS, Bank Indonesia (JISDOR/kurs), Bapanas (harga pangan), Kemenag
+  - Hari libur nasional & cuti bersama (SKB 3 Menteri), kalender Hijriah/Jawa, jadwal sholat
+  - Direktori sekolah/rumah sakit/kampus (PDDikti)
+  - Aturan berperiode 2026 dalam registry JSON (`skills/data-resmi-indonesia/references/aturan/`): pajak (PTKP, PPh 21 TER, PPN), BPJS, UMP — digerbangi validator `scripts/validate-registry.mjs`
+  - Referensi lintas skill dua arah dengan `indonesian-data-forms`
+- Penyegaran dokumen repo untuk rilis v1.4.0 (README, AGENTS, QUICKSTART, CONTRIBUTING)
 
 ## [1.3.0] - 2026-11-03
 
@@ -60,7 +69,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive testing guides
 - Security best practices
 
-[Unreleased]: https://github.com/irhamullah/indonesian-dev-skills/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/irhamullah/indonesian-dev-skills/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/irhamullah/indonesian-dev-skills/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/irhamullah/indonesian-dev-skills/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/irhamullah/indonesian-dev-skills/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/irhamullah/indonesian-dev-skills/compare/v1.0.0...v1.1.0

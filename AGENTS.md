@@ -12,6 +12,7 @@ Copy tabel di bawah ini ke `~/.config/opencode/AGENTS.md`, tambahkan ke section 
 | Deploy Laravel/Node.js, VPS Indonesia (IDCloudHost, Niagahoster, Rumahweb, Biznet Gio), Nginx, Supervisor queue worker, SSL Let's Encrypt, database backup, cPanel shared hosting, zero-downtime deployment | `hosting-deployment-indonesia` |
 | Validasi NIK/NPWP, wilayah administratif (provinsi/kota/kecamatan/kelurahan), format nomor HP (+62), ongkir (RajaOngkir/Biteship), format Rupiah, timezone WIB/WITA/WIT | `indonesian-data-forms` |
 | Kirim notifikasi WhatsApp/Telegram/Email, WA gateway (Fonnte, Wablas, Watzap, Meta Cloud API), Telegram Bot, OTP WhatsApp, email transaksional, alert server | `notifikasi-indonesia` |
+| Data resmi Indonesia: BMKG (gempa/cuaca/nowcast), BPS, Bank Indonesia (JISDOR/kurs), Bapanas (harga pangan), hari libur & cuti bersama, kalender Hijriah/Jawa, jadwal sholat, direktori sekolah/RS/kampus, aturan pajak (PTKP/PPh 21 TER/PPN), BPJS, UMP | `data-resmi-indonesia` |
 
 ---
 
@@ -53,6 +54,7 @@ cat >> ~/.config/opencode/AGENTS.md << 'EOF'
 | Deploy Laravel/Node.js, VPS Indonesia (IDCloudHost, Niagahoster, Rumahweb, Biznet Gio), Nginx, Supervisor queue worker, SSL Let's Encrypt, database backup, cPanel shared hosting, zero-downtime deployment | `hosting-deployment-indonesia` |
 | Validasi NIK/NPWP, wilayah administratif (provinsi/kota/kecamatan/kelurahan), format nomor HP (+62), ongkir (RajaOngkir/Biteship), format Rupiah, timezone WIB/WITA/WIT | `indonesian-data-forms` |
 | Kirim notifikasi WhatsApp/Telegram/Email, WA gateway (Fonnte, Wablas, Watzap, Meta Cloud API), Telegram Bot, OTP WhatsApp, email transaksional, alert server | `notifikasi-indonesia` |
+| Data resmi Indonesia: BMKG (gempa/cuaca/nowcast), BPS, Bank Indonesia (JISDOR/kurs), Bapanas (harga pangan), hari libur & cuti bersama, kalender Hijriah/Jawa, jadwal sholat, direktori sekolah/RS/kampus, aturan pajak (PTKP/PPh 21 TER/PPN), BPJS, UMP | `data-resmi-indonesia` |
 <!-- /indonesian-dev-skills -->
 EOF
 ```
@@ -122,6 +124,7 @@ When multiple skills could apply, Indonesian Developer Skills has **domain-speci
 2. If task mentions **VPS/hosting/cPanel** → `hosting-deployment-indonesia` first
 3. If task mentions **NIK/NPWP/wilayah/ongkir/Rupiah** → `indonesian-data-forms` first
 4. If task mentions **WhatsApp/Telegram/OTP/notifikasi** → `notifikasi-indonesia` first
+5. If task mentions **data resmi Indonesia** (BMKG/BPS/BI/Bapanas/hari libur/kalender/pajak/BPJS/UMP) → `data-resmi-indonesia` first
 
 Example:
 ```
@@ -242,6 +245,9 @@ All skills complete:
 
 ### 4. Notifikasi Indonesia ✅
 **Trigger:** "Kirim OTP WhatsApp", "Notifikasi Telegram", "WA gateway Fonnte", "Email transaksional"
+
+### 5. Data Resmi Indonesia ✅
+**Trigger:** "Hari libur nasional 2026", "Gempa BMKG", "Prakiraan cuaca", "JISDOR", "Kurs BI", "Harga pangan", "Kalender Hijriah", "Jadwal sholat", "UMP 2026", "PPh 21 TER", "PTKP"
 
 **Want to contribute a new skill?** See CONTRIBUTING.md
 

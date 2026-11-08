@@ -8,6 +8,7 @@ Indonesian developers punya pain points unik:
 - Payment gateway lokal (Midtrans, Xendit, Doku) dengan format berbeda-beda
 - Deploy di VPS lokal (Biznet Gio, IDCloudHost, Niagahoster)
 - Data Indonesia (provinsi/kota, NIK/NPWP validation, format Rupiah)
+- Data resmi & aturan berperiode Indonesia (BMKG, BPS, Bank Indonesia, pajak, upah minimum, hari libur)
 - Notifikasi via WhatsApp/Telegram (WhatsApp gateway berbeda-beda + OTP yang aman)
 
 Skill bundle ini solve masalah-masalah yang **specific ke Indonesia** dan belum ada di skill bundle lain.
@@ -128,6 +129,33 @@ Kirim notifikasi via WhatsApp, Telegram, dan Email — channel yang benar-benar 
 - `references/email-notification.md` - SMTP/Gmail/transactional
 - `references/otp-and-templates.md` - OTP flow & templates
 - `references/provider-comparison.md` - Perbandingan & rekomendasi
+
+### 5. Data Resmi Indonesia ✅
+
+**Status:** Complete
+
+Data resmi Indonesia (BMKG, BPS, Bank Indonesia, Badan Pangan Nasional, Kemenag) dan aturan berperiode (pajak, BPJS, upah minimum) dalam registry bertanggal.
+
+**Solves:**
+- ✅ Hari libur nasional & cuti bersama (SKB 3 Menteri)
+- ✅ Gempa/prakiraan cuaca/peringatan dini BMKG
+- ✅ Kurs BI & JISDOR
+- ✅ Statistik BPS & harga pangan Bapanas
+- ✅ Kalender Hijriah/Jawa & jadwal sholat
+- ✅ Direktori sekolah/rumah sakit/kampus (PDDikti)
+- ✅ Aturan pajak 2026 (PTKP, PPh 21 TER, PPN), BPJS, UMP lewat registry JSON + validator
+
+**Use when:**
+- Butuh data resmi Indonesia (BMKG, BPS, BI, Bapanas, Kemenag)
+- Butuh aturan berperiode yang angkanya berubah tiap tahun (pajak, BPJS, UMP)
+- Cek hari libur, kalender Hijriah, jadwal sholat
+
+**Files:**
+- `SKILL.md` - Main workflow (router data vs aturan)
+- `references/data/*.md` - Panduan per topik data (BMKG, BI, BPS, Bapanas, hari libur, kalender, sholat, direktori)
+- `references/aturan/*.json` - Registry bertanggal angka aturan (pajak, ketenagakerjaan)
+- `scripts/validate-registry.mjs` - Validator registry aturan
+- Catatan: **aturan berperiode** angka-angka ada di registry JSON (`skills/data-resmi-indonesia/references/aturan/`), bukan di prosa.
 
 ## 🚀 Installation
 

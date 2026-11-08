@@ -98,9 +98,7 @@ cp -r your-skill ~/.config/opencode/test-skills/skills/
 ### 4. Submit Pull Request
 
 ```bash
-# 1. Fork repo
-gh repo fork irhamullah/indonesian-dev-skills
-
+# 1. Fork repo (via web/github.com)
 # 2. Create branch
 git checkout -b skill/your-skill-name
 
@@ -116,10 +114,23 @@ git add skills/your-skill-name/
 # 6. Commit
 git commit -m "Add skill: your-skill-name"
 
-# 7. Push and create PR
+# 7. Push and open PR (via web)
 git push origin skill/your-skill-name
-gh pr create
+# Lalu buka PR di https://github.com/irhamullah/indonesian-dev-skills
 ```
+
+### 5. Aturan berperiode (skill #5)
+
+Untuk skill **Data Resmi Indonesia**, kalau menambah/mengubah aturan
+berperiode (pajak, BPJS, UMP), **wajib** lewat registry JSON
+(`skills/data-resmi-indonesia/references/aturan/*.json`) dan jalankan validator:
+
+```bash
+node skills/data-resmi-indonesia/scripts/validate-registry.mjs
+```
+
+Exit code `0` berarti valid. Jangan tulis angka aturan di prosa
+`SKILL.md` atau `references/aturan/*.md` — harus di JSON.
 
 ## Quality Standards
 
@@ -182,47 +193,39 @@ Looking for contribution ideas? Here are pain points we've heard:
 
 ### High Priority
 
-1. **VPS Deployment Indonesia**
-   - Biznet Gio, IDCloudHost, Niagahosta setup
-   - Nginx + SSL + queue workers
-   - Backup automation
-
-2. **Indonesian Data & Forms**
-   - Provinsi/kota/kecamatan/kelurahan
-   - NIK & NPWP validation
-   - Phone number formatting
-   - Ongkir integration (RajaOngkir, Biteship)
-
-3. **E-commerce Indonesia Compliance**
+1. **E-commerce Indonesia Compliance**
    - Kominfo registration
    - Consumer protection workflows
    - Tax invoice (Faktur Pajak)
 
+> Catatan: **VPS Deployment Indonesia** dan **Indonesian Data & Forms** sudah
+> terwujud sebagai skill #2 dan #3 — jangan diusulkan ulang.
+
 ### Medium Priority
 
-4. **Indonesian Fintech Integration**
+2. **Indonesian Fintech Integration**
    - P2P lending APIs
    - Digital banking APIs (BCA, Mandiri)
    - Credit scoring services
 
-5. **Government API Integration**
+3. **Government API Integration**
    - NIK verification (Dukcapil)
    - Business registration (OSS)
    - Tax reporting (DJP)
 
-6. **Indonesian SaaS Tools**
+4. **Indonesian SaaS Tools**
    - Qontak (CRM)
    - Mekari (HR/Accounting)
    - Sales1 (CRM)
 
 ### Lower Priority (but still welcome!)
 
-7. **Indonesian Content Moderation**
+5. **Indonesian Content Moderation**
    - Bahasa Indonesia profanity filter
    - Cultural sensitivity checks
    - Religious content guidelines
 
-8. **Indonesian SEO & Marketing**
+6. **Indonesian SEO & Marketing**
    - Tokopedia/Shopee/Lazada integration
    - Indonesian keyword research
    - Social media (Instagram/TikTok Indonesia)

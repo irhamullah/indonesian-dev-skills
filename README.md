@@ -2,7 +2,7 @@
 
 # 🇮🇩 Indonesian Developer Skills
 
-**Skill bundle untuk OpenCode & AI coding agents** — dibangun khusus untuk alur kerja developer Indonesia.
+**Skill bundle untuk semua AI coding agent** (Claude Code, OpenAI Codex, Cursor, Gemini CLI, VS Code, OpenCode) — dibangun khusus untuk alur kerja developer Indonesia.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-1.4.0-blue.svg)](CHANGELOG.md)
@@ -167,6 +167,98 @@ Trigger skill langsung dari chat OpenCode, misalnya:
 "Jadwal sholat hari ini"
 "Berapa PPh 21 TER untuk penghasilan 15 juta?"
 ```
+
+---
+
+## 🖥️ Instalasi di Berbagai AI Agent
+
+Bundle ini memakai **format terbuka Agent Skills** (frontmatter `name` + `description` di `SKILL.md`) yang diinisiasi Anthropic dan diadopsi lintas tool. Artinya, satu folder skill yang sama bisa dipasang di **semua AI agent populer** tanpa perlu konversi format.
+
+> Semua agent di bawah memuat skill dengan cara **copy direktori `skills/<nama-skill>/`** ke lokasi yang sesuai. Tidak ada penulisan ulang.
+
+| AI Agent | Lokasi untuk skills | Dukungan |
+| --- | --- | --- |
+| **Claude Code** | `~/.claude/skills/` | ✅ native |
+| **OpenAI Codex** | `~/.codex/skills/` | ✅ native |
+| **Cursor** | `.cursor/skills/` (project) / `~/.agents/skills/` (user) | ✅ native |
+| **Gemini CLI** | `~/.agents/skills/` | ✅ native |
+| **VS Code** | `.github/skills/` | ✅ native |
+| **OpenCode** | `opencode.jsonc` → `skills` array | ✅ native |
+
+### 1. Claude Code
+
+```bash
+git clone https://github.com/irhamullah/indonesian-dev-skills ~/indonesian-dev-skills
+# Salin skill (masing-masing folder berisi SKILL.md)
+cp -R ~/indonesian-dev-skills/skills/payment-gateway-indonesia ~/.claude/skills/
+cp -R ~/indonesian-dev-skills/skills/hosting-deployment-indonesia ~/.claude/skills/
+cp -R ~/indonesian-dev-skills/skills/indonesian-data-forms ~/.claude/skills/
+cp -R ~/indonesian-dev-skills/skills/notifikasi-indonesia ~/.claude/skills/
+cp -R ~/indonesian-dev-skills/skills/data-resmi-indonesia ~/.claude/skills/
+```
+
+Claude Code otomatis mendeteksi skill dari `~/.claude/skills/<nama>/SKILL.md`.
+
+### 2. OpenAI Codex
+
+```bash
+mkdir -p ~/.codex/skills
+cp -R ~/indonesian-dev-skills/skills/* ~/.codex/skills/
+```
+
+Codex (sejak Des 2025) membaca direktori yang memuat `SKILL.md` di `~/.codex/skills/`.
+
+### 3. Cursor
+
+```bash
+# Project-level (pakai di repo tertentu)
+cp -R ~/indonesian-dev-skills/skills/* .cursor/skills/
+
+# atau user-level (global)
+mkdir -p ~/.agents/skills
+cp -R ~/indonesian-dev-skills/skills/* ~/.agents/skills/
+```
+
+Cursor mengikuti format Agent Skills terbuka yang sama — folder yang sama juga bekerja di Codex & Claude Code.
+
+### 4. Gemini CLI
+
+```bash
+mkdir -p ~/.agents/skills
+cp -R ~/indonesian-dev-skills/skills/* ~/.agents/skills/
+```
+
+### 5. VS Code
+
+```bash
+mkdir -p .github/skills
+cp -R ~/indonesian-dev-skills/skills/* .github/skills/
+```
+
+### 6. OpenCode
+
+```bash
+git clone https://github.com/irhamullah/indonesian-dev-skills \
+  ~/.config/opencode/indonesian-dev-skills
+```
+
+Lalu di `opencode.jsonc`:
+
+```json
+{
+  "skills": [
+    "~/.config/opencode/indonesian-dev-skills/skills"
+  ]
+}
+```
+
+Dan tambahkan tabel routing ke `~/.config/opencode/AGENTS.md`:
+
+```bash
+cat ~/.config/opencode/indonesian-dev-skills/AGENTS.md >> ~/.config/opencode/AGENTS.md
+```
+
+> 💡 **Tips:** Tombol *"Use this template"* di GitHub atau `git submodule` juga bisa dipakai agar selalu sinkron dengan update terbaru.
 
 ---
 

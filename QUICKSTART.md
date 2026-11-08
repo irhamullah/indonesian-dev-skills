@@ -5,6 +5,10 @@
 
 Skill bundle untuk workflow khas Indonesian developers. Saat ini berisi **5 skill**.
 
+Format `SKILL.md` memakai **Agent Skills terbuka** (frontmatter `name` + `description`),
+jadi kompatibel dengan **semua AI agent populer**: Claude Code, OpenAI Codex, Cursor,
+Gemini CLI, VS Code, dan OpenCode. Instalasi per agent ada di [README](README.md#-instalasi-di-berbagai-ai-agent).
+
 ## 📦 What's Included
 
 | # | Skill | Fokus |

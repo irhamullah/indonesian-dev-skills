@@ -1,0 +1,59 @@
+{
+  "name": "indonesian-dev-skills",
+  "version": "1.4.0",
+  "description": "Agent Skills untuk developer Indonesia: payment gateway lokal (Midtrans, Xendit, Doku), hosting VPS Indonesia & cPanel, data & formulir Indonesia, notifikasi WhatsApp/Telegram/Email, serta data resmi & aturan berperiode (BMKG, BPS, BI, Bapanas, pajak, BPJS, UMP).",
+  "type": "module",
+  "bin": {
+    "indonesian-dev-skills": "bin/indonesian-dev-skills.mjs"
+  },
+  "files": [
+    "bin",
+    "skills",
+    ".claude-plugin",
+    "scripts",
+    "AGENTS.md",
+    "QUICKSTART.md",
+    "CHANGELOG.md",
+    "README.md",
+    "README.en.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "validate": "node scripts/validate-skills.mjs && node skills/data-resmi-indonesia/scripts/validate-registry.mjs",
+    "test": "node --test skills/data-resmi-indonesia/scripts/validate-registry.test.mjs",
+    "freshness": "node scripts/check-freshness.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "agent-skills",
+    "claude-code",
+    "codex",
+    "cursor",
+    "gemini-cli",
+    "opencode",
+    "indonesia",
+    "indonesian-developers",
+    "payment-gateway",
+    "midtrans",
+    "xendit",
+    "doku",
+    "whatsapp",
+    "laravel",
+    "nodejs",
+    "bmkg",
+    "bps",
+    "pajak"
+  ],
+  "author": "irhamullah <irhamullah01@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/irhamullah/indonesian-dev-skills#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/irhamullah/indonesian-dev-skills.git"
+  },
+  "bugs": {
+    "url": "https://github.com/irhamullah/indonesian-dev-skills/issues"
+  }
+}

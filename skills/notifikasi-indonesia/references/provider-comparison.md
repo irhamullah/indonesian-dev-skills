@@ -21,6 +21,18 @@ Perbandingan channel & provider + rekomendasi kapan pakai apa.
 
 ---
 
+## Channel per Konteks
+
+```
+OTP / verifikasi     → WhatsApp (delivery rate tinggi di ID)
+Notif transaksional  → WhatsApp + Email (redundansi)
+Alert internal       → Telegram (gratis, cepat, kaya fitur)
+Dokumen formal       → Email (invoice, kontrak)
+Marketing            → WhatsApp (opt-in wajib)
+```
+
+---
+
 ## WhatsApp Provider Comparison
 
 | Provider | Tipe | Biaya | Setup | Ban Risk | Fitur |

@@ -506,3 +506,122 @@ Midtrans: refund, partial_refund
 Xendit: REFUNDED
 Doku: REFUNDED
 ```
+
+---
+
+## Normalized Payment Interface
+
+Contract provider-agnostic untuk semua adapter. Normalize sekali di boundary adapter,
+sisa aplikasi memakai tipe yang sama.
+
+```typescript
+// types/payment.ts
+
+export type PaymentMethod = 'qris' | 'va_bca' | 'va_bni' | 'va_mandiri' | 'gopay' | 'ovo' | 'dana' | 'shopeepay';
+
+export type PaymentStatus = 
+  | 'pending'      // Menunggu pembayaran
+  | 'paid'         // Sudah dibayar
+  | 'expired'      // Kadaluarsa
+  | 'cancelled'    // Dibatalkan
+  | 'failed'       // Gagal
+  | 'refunded';    // Di-refund
+
+export interface PaymentRequest {
+  orderId: string;
+  amount: number;
+  method: PaymentMethod;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  description?: string;
+  expiryMinutes?: number;
+}
+
+export interface PaymentResponse {
+  transactionId: string;
+  orderId: string;
+  status: PaymentStatus;
+  method: PaymentMethod;
+  amount: number;
+  paymentUrl?: string;      // For e-wallet redirect
+  qrCode?: string;          // For QRIS
+  vaNumber?: string;        // For Virtual Account
+  bankCode?: string;        // For Virtual Account
+  expiresAt: Date;
+  createdAt: Date;
+}
+
+export interface WebhookPayload {
+  transactionId: string;
+  orderId: string;
+  status: PaymentStatus;
+  amount: number;
+  paidAt?: Date;
+  raw: unknown;  // Original payload dari provider
+}
+
+export interface PaymentGateway {
+  // Create payment
+  createPayment(request: PaymentRequest): Promise<PaymentResponse>;
+  
+  // Verify webhook signature
+  verifyWebhook(rawBody: string, signature: string): boolean;
+  
+  // Parse webhook payload
+  parseWebhook(body: unknown): WebhookPayload;
+  
+  // Get payment status
+  getPaymentStatus(transactionId: string): Promise<PaymentResponse>;
+  
+  // Cancel payment (optional)
+  cancelPayment?(transactionId: string): Promise<void>;
+}
+```
+
+---
+
+## Normalize at the Boundary
+
+```typescript
+// Bad: Business logic tahu detail provider
+if (provider === 'midtrans') {
+  if (status === 'settlement') return 'paid';
+} else if (provider === 'xendit') {
+  if (status === 'SUCCEEDED') return 'paid';
+}
+
+// Good: Normalize di adapter
+interface PaymentGateway {
+  createPayment(request: PaymentRequest): Promise<PaymentResponse>;
+  verifyWebhook(rawBody: string, signature: string): WebhookPayload;
+  normalizeStatus(providerStatus: string): PaymentStatus;
+}
+
+class MidtransAdapter implements PaymentGateway {
+  normalizeStatus(status: string): PaymentStatus {
+    const mapping = {
+      'settlement': 'paid',
+      'pending': 'pending',
+      'expire': 'expired',
+      'cancel': 'cancelled',
+    };
+    return mapping[status] || 'unknown';
+  }
+}
+```
+
+---
+
+## Anti-Pattern: Status String Hardcoded
+
+```typescript
+// Bad: Magic strings scattered everywhere
+if (payment.status === 'settlement') { ... }
+if (payment.status === 'SUCCEEDED') { ... }
+if (payment.status === 'SUCCESS') { ... }
+
+// Good: Normalized enum
+enum PaymentStatus { PAID = 'paid', PENDING = 'pending', ... }
+if (payment.status === PaymentStatus.PAID) { ... }
+```

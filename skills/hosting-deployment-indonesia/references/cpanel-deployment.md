@@ -34,11 +34,21 @@ cp -r public/* ~/public_html/yourdomain.com/
 nano ~/public_html/.htaccess
 ```
 
+**Alternatif layout:** upload langsung ke `~/public_html/yourdomain.com` (tanpa symlink), lalu sesuaikan path cron scheduler di bawah.
+
 ```apache
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
+```
+
+**Alternatif rewrite (langsung ke `public/`):**
+
+```apache
+RewriteEngine On
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteRule ^(.*)$ /public/$1 [L,QSA]
 ```
 
 ### Install Composer Dependencies
@@ -93,6 +103,13 @@ php artisan config:cache
 
 # Every minute
 * * * * * cd /home/username/repositories/laravel-app && php artisan schedule:run >> /dev/null 2>&1
+```
+
+**Kalau project di-upload langsung ke `public_html/yourdomain.com`:**
+
+```bash
+# Every minute
+* * * * * cd /home/username/public_html/yourdomain.com && php artisan schedule:run >> /dev/null 2>&1
 ```
 
 ### SSL Setup

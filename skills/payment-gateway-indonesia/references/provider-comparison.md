@@ -554,3 +554,71 @@ Jika mau migrate provider:
 - [ ] Monitor error rates
 - [ ] Gradual rollout (10% → 50% → 100%)
 - [ ] Keep old provider active selama transisi
+
+---
+
+## Factory Pattern untuk Provider Selection
+
+Factory membuat switch provider mudah dan business layer tetap provider-agnostic.
+
+```typescript
+// payment-gateway.factory.ts
+
+import { PaymentGateway } from './types/payment';
+import { MidtransAdapter } from './adapters/midtrans.adapter';
+import { XenditAdapter } from './adapters/xendit.adapter';
+import { DokuAdapter } from './adapters/doku.adapter';
+
+export type PaymentProvider = 'midtrans' | 'xendit' | 'doku';
+
+export class PaymentGatewayFactory {
+  static create(provider: PaymentProvider): PaymentGateway {
+    switch (provider) {
+      case 'midtrans':
+        return new MidtransAdapter({
+          serverKey: process.env.MIDTRANS_SERVER_KEY!,
+          clientKey: process.env.MIDTRANS_CLIENT_KEY!,
+          isProduction: process.env.NODE_ENV === 'production',
+        });
+      
+      case 'xendit':
+        return new XenditAdapter({
+          apiKey: process.env.XENDIT_API_KEY!,
+          webhookToken: process.env.XENDIT_WEBHOOK_TOKEN!,
+          isProduction: process.env.NODE_ENV === 'production',
+        });
+      
+      case 'doku':
+        return new DokuAdapter({
+          clientId: process.env.DOKU_CLIENT_ID!,
+          sharedKey: process.env.DOKU_SHARED_KEY!,
+          isProduction: process.env.NODE_ENV === 'production',
+        });
+      
+      default:
+        throw new Error(`Unknown payment provider: ${provider}`);
+    }
+  }
+}
+```
+
+---
+
+## Anti-Pattern: Provider Logic Leaking to Business Layer
+
+```typescript
+// Bad: Business logic tahu detail provider
+async function processOrder(orderId: string) {
+  if (config.provider === 'midtrans') {
+    // Midtrans-specific logic
+  } else if (config.provider === 'xendit') {
+    // Xendit-specific logic
+  }
+}
+
+// Good: Business logic provider-agnostic
+async function processOrder(orderId: string) {
+  const gateway = PaymentGatewayFactory.create(config.provider);
+  await gateway.createPayment(request);
+}
+```

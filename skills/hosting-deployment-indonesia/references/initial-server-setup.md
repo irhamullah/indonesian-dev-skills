@@ -4,16 +4,22 @@
 
 Security checklist untuk fresh Ubuntu VPS.
 
+Fresh VPS dari IDCloudHost/Niagahoster/Rumahweb biasanya: OS Ubuntu 22.04 atau 20.04, root access via SSH, no firewall configured, no swap.
+
 ---
 
 ## Quick Setup (Copy-Paste)
 
 ```bash
+# 0. Login sebagai root
+ssh root@your-vps-ip
+
 # 1. Update system
 apt update && apt upgrade -y
 
 # 2. Create deploy user
 adduser deploy
+# atau non-interaktif: adduser --disabled-password --gecos "" deploy
 usermod -aG sudo deploy
 
 # 3. Setup SSH key
@@ -39,6 +45,7 @@ chmod 600 /swapfile
 mkswap /swapfile
 swapon /swapfile
 echo '/swapfile none swap sw 0 0' >> /etc/fstab
+# atau: echo '/swapfile none swap sw 0 0' | tee -a /etc/fstab
 
 # 7. Set timezone
 timedatectl set-timezone Asia/Jakarta
@@ -74,6 +81,11 @@ systemctl restart sshd
 ```bash
 # Open new terminal, test login as deploy
 ssh -p 2222 deploy@your-vps-ip
+# atau kalau port default 22:
+ssh deploy@your-vps-ip
+
+# Verify sudo works
+sudo apt update  # Should work
 ```
 
 ---

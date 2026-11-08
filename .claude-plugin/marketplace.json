@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "indonesian-dev-skills",
+  "version": "1.4.0",
+  "description": "Agent Skills untuk developer Indonesia: payment gateway lokal, hosting VPS Indonesia, data & formulir, notifikasi, dan data resmi/aturan berperiode.",
+  "owner": {
+    "name": "irhamullah",
+    "email": "irhamullah01@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "indonesian-dev-skills",
+      "description": "5 skill siap pakai untuk alur kerja developer Indonesia (Midtrans/Xendit/Doku, VPS & cPanel, NIK/NPWP/ongkir, WhatsApp/Telegram/Email, BMKG/BPS/BI/pajak).",
+      "source": "./",
+      "category": "development"
+    }
+  ]
+}

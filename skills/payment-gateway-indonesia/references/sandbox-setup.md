@@ -576,3 +576,58 @@ Before switching to production:
 | **Midtrans** | [Instant](https://dashboard.sandbox.midtrans.com/) | dashboard.sandbox.midtrans.com | Separate sandbox URL | ✅ Via dashboard |
 | **Xendit** | [Instant](https://dashboard.xendit.co/register) | dashboard.xendit.co | Toggle in dashboard | ✅ Via dashboard |
 | **Doku** | Manual approval | merchant.doku.com | Separate sandbox URL | ❌ Manual |
+
+---
+
+## Unit Test Adapter (Midtrans)
+
+Contoh unit test untuk signature verification dan status normalization.
+
+```typescript
+// tests/webhook.test.ts
+
+import { MidtransAdapter } from '../adapters/midtrans.adapter';
+
+describe('Midtrans Webhook', () => {
+  const adapter = new MidtransAdapter({
+    serverKey: 'SB-Mid-server-test',
+    clientKey: 'SB-Mid-client-test',
+    isProduction: false,
+  });
+  
+  it('should verify valid webhook signature', () => {
+    const payload = {
+      order_id: 'ORDER-123',
+      status_code: '200',
+      gross_amount: '100000',
+      transaction_status: 'settlement',
+    };
+    
+    // Generate valid signature
+    const signature = crypto
+      .createHash('sha512')
+      .update(`${payload.order_id}${payload.status_code}${payload.gross_amount}SB-Mid-server-test`)
+      .digest('hex');
+    
+    const isValid = adapter.verifyWebhook(JSON.stringify(payload), signature);
+    expect(isValid).toBe(true);
+  });
+  
+  it('should reject invalid signature', () => {
+    const payload = { order_id: 'ORDER-123' };
+    const isValid = adapter.verifyWebhook(JSON.stringify(payload), 'invalid-signature');
+    expect(isValid).toBe(false);
+  });
+  
+  it('should normalize status correctly', () => {
+    const payload = adapter.parseWebhook({
+      transaction_status: 'settlement',
+      order_id: 'ORDER-123',
+      transaction_id: 'TXN-123',
+      gross_amount: '100000',
+    });
+    
+    expect(payload.status).toBe('paid');
+  });
+});
+```

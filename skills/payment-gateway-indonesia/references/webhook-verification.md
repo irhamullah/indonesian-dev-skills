@@ -631,3 +631,146 @@ Webhook verification failed? Check:
 - [ ] No extra whitespace or newlines in signature string
 - [ ] Keys not expired or rotated
 - [ ] Using sandbox keys in development, production keys in production
+
+---
+
+## Webhook Security First
+
+Signature verification wajib dan algoritmanya berbeda per provider. Verify sebelum
+process payload.
+
+```typescript
+// Bad: Process dulu, verify belakangan (atau tidak sama sekali)
+app.post('/webhook/midtrans', (req, res) => {
+  const payment = await processPayment(req.body);
+  // No signature verification!
+});
+
+// Good: Verify first, process after
+app.post('/webhook/midtrans', (req, res) => {
+  const isValid = midtransAdapter.verifyWebhook(
+    req.rawBody,
+    req.headers['x-signature']
+  );
+  
+  if (!isValid) {
+    return res.status(401).json({ error: 'Invalid signature' });
+  }
+  
+  await processPayment(req.body);
+  res.status(200).send('OK');
+});
+```
+
+### Anti-Pattern: No Signature Verification
+
+```typescript
+// Bad: Trust webhook tanpa verify
+app.post('/webhook', async (req, res) => {
+  await updatePayment(req.body); // Vulnerable to fake webhooks!
+});
+```
+
+---
+
+## Idempotent Webhook Handling
+
+Webhook bisa datang multiple times untuk transaksi yang sama. Proses sekali saja.
+
+```typescript
+// Bad: Process setiap webhook datang
+app.post('/webhook', async (req, res) => {
+  await updatePaymentStatus(req.body.order_id, 'paid');
+  await sendEmailReceipt(req.body.order_id); // Bisa kirim email multiple times!
+});
+
+// Good: Check first, process once
+app.post('/webhook', async (req, res) => {
+  const payment = await getPayment(req.body.order_id);
+  
+  if (payment.status === 'paid') {
+    return res.status(200).send('Already processed');
+  }
+  
+  await updatePaymentStatus(req.body.order_id, 'paid');
+  await sendEmailReceipt(req.body.order_id);
+  res.status(200).send('OK');
+});
+```
+
+### Anti-Pattern: No Idempotency Check
+
+```typescript
+// Bad: Process every webhook
+app.post('/webhook', async (req, res) => {
+  await chargeCustomer(orderId); // Bisa charge multiple times!
+});
+
+// Good: Check first
+if (payment.status === 'paid') return;
+await chargeCustomer(orderId);
+```
+
+---
+
+## Provider-Agnostic Webhook Handler
+
+Handler tunggal untuk semua provider: verify → parse → idempotency → update status →
+post-payment actions.
+
+```typescript
+// routes/webhook.ts
+
+import express from 'express';
+import { PaymentGatewayFactory } from '../payment-gateway.factory';
+
+const router = express.Router();
+
+router.post('/webhook/:provider', express.raw({ type: 'application/json' }), async (req, res) => {
+  try {
+    const provider = req.params.provider as 'midtrans' | 'xendit' | 'doku';
+    const gateway = PaymentGatewayFactory.create(provider);
+    
+    // 1. Verify signature
+    const signature = req.headers['x-signature'] || req.headers['x-callback-token'] as string;
+    const isValid = gateway.verifyWebhook(req.body.toString(), signature);
+    
+    if (!isValid) {
+      console.error(`Invalid webhook signature from ${provider}`);
+      return res.status(401).json({ error: 'Invalid signature' });
+    }
+    
+    // 2. Parse payload
+    const payload = gateway.parseWebhook(JSON.parse(req.body.toString()));
+    
+    // 3. Check idempotency
+    const payment = await PaymentService.getByOrderId(payload.orderId);
+    
+    if (payment.status === 'paid') {
+      console.log(`Payment ${payload.orderId} already processed`);
+      return res.status(200).send('OK');
+    }
+    
+    // 4. Update payment status
+    await PaymentService.updateStatus({
+      orderId: payload.orderId,
+      status: payload.status,
+      transactionId: payload.transactionId,
+      paidAt: payload.paidAt,
+    });
+    
+    // 5. Trigger post-payment actions
+    if (payload.status === 'paid') {
+      await OrderService.fulfillOrder(payload.orderId);
+      await NotificationService.sendPaymentSuccess(payload.orderId);
+    }
+    
+    res.status(200).send('OK');
+  } catch (error) {
+    console.error('Webhook processing error:', error);
+    res.status(500).json({ error: 'Internal error' });
+  }
+});
+
+export default router;
+```

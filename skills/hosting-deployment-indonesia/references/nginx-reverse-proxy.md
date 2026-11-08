@@ -45,6 +45,16 @@ server {
 | `X-Forwarded-For` | Chain of proxy IPs |
 | `X-Forwarded-Proto` | http or https |
 
+```bash
+# Simpan sebagai /etc/nginx/sites-available/nodejs-app
+sudo nano /etc/nginx/sites-available/nodejs-app
+
+# Enable site
+sudo ln -s /etc/nginx/sites-available/nodejs-app /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
 ---
 
 ## With SSL (Production Setup)
@@ -385,6 +395,56 @@ server {
 - `rate=10r/s` → 10 requests per second average
 - `burst=20` → Allow burst up to 20 requests
 - `nodelay` → Don't delay requests within burst
+
+---
+
+## Laravel Server Block
+
+```bash
+# Create Nginx config
+sudo nano /etc/nginx/sites-available/laravel-app
+```
+
+```nginx
+server {
+    listen 80;
+    server_name yourdomain.com www.yourdomain.com;
+    root /var/www/laravel-app/public;
+
+    add_header X-Frame-Options "SAMEORIGIN";
+    add_header X-Content-Type-Options "nosniff";
+
+    index index.php;
+
+    charset utf-8;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location = /robots.txt  { access_log off; log_not_found off; }
+
+    error_page 404 /index.php;
+
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+}
+```
+
+```bash
+# Enable site
+sudo ln -s /etc/nginx/sites-available/laravel-app /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
+```
 
 ---
 

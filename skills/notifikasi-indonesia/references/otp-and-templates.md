@@ -19,6 +19,38 @@ Flow OTP yang aman dan manajemen template pesan.
 
 ---
 
+## Varian Ringkas (sendOTP)
+
+Versi minimal dari flow di atas, cukup untuk satu channel WhatsApp.
+
+```typescript
+async function sendOTP(phone: string, purpose: string) {
+  // 1. Rate limit
+  const key = `otp:${phone}`;
+  const attempts = await redis.incr(key);
+  if (attempts === 1) await redis.expire(key, 300);  // 5 min window
+  if (attempts > 3) throw new Error('Terlalu banyak permintaan OTP. Coba lagi nanti.');
+
+  // 2. Generate OTP (crypto-secure!)
+  const code = crypto.randomInt(100000, 999999).toString();
+
+  // 3. Store with TTL
+  await redis.set(`otp:code:${phone}`, await hash(code), 'EX', 300);
+
+  // 4. Send via WhatsApp
+  await notifier.send({
+    channel: 'whatsapp',
+    to: phone,
+    template: 'otp',
+    data: { code, minutes: '5' },
+  });
+
+  return { sent: true, ttl: 300 };
+}
+```
+
+---
+
 ## Implementation
 
 ```typescript
@@ -102,6 +134,18 @@ export class OTPService {
 | **Rate limit request** | Cegah SMS/WA bombing |
 | **Rate limit verify** | Cegah brute force |
 | **Log tanpa OTP** | Jangan bocorkan ke log |
+
+---
+
+## Idempotency
+
+Jangan kirim OTP berkali-kali untuk request yang sama. Rate limit per nomor:
+maksimal 3 OTP per 5 menit (lihat `RATE_WINDOW` dan `MAX_REQUESTS` di atas).
+
+```typescript
+// Jangan kirim OTP berkali-kali untuk request yang sama
+// Rate limit per nomor: max 3 OTP per 5 menit
+```
 
 ---
 

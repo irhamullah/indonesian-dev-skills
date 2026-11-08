@@ -1,0 +1,58 @@
+name: Freshness check
+
+on:
+  schedule:
+    # Setiap tanggal 1 pukul 01:00 UTC — aturan berperiode jarang berubah di tengah bulan.
+    - cron: "0 1 1 * *"
+  workflow_dispatch:
+    inputs:
+      max_age_days:
+        description: "Batas umur verifikasi (hari)"
+        required: false
+        default: "180"
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  freshness:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Check registry freshness
+        id: check
+        env:
+          MAX_AGE_DAYS: ${{ inputs.max_age_days || '180' }}
+        run: |
+          set +e
+          node scripts/check-freshness.mjs --max-age-days "$MAX_AGE_DAYS" > freshness-report.md
+          echo "status=$?" >> "$GITHUB_OUTPUT"
+          cat freshness-report.md
+
+      - name: Open or update tracking issue
+        if: steps.check.outputs.status != '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh label create freshness \
+            --color FBCA04 \
+            --description "Registry aturan perlu diverifikasi ulang" 2>/dev/null || true
+
+          EXISTING=$(gh issue list --label freshness --state open --json number --jq '.[0].number // empty')
+
+          if [ -n "$EXISTING" ]; then
+            gh issue comment "$EXISTING" --body-file freshness-report.md
+          else
+            gh issue create \
+              --title "Registry aturan perlu diverifikasi ulang" \
+              --label freshness \
+              --body-file freshness-report.md
+          fi

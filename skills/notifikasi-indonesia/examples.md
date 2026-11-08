@@ -40,6 +40,93 @@ export function maskRecipient(to: string): string {
 
 ---
 
+## Core: Unified Interface (types/notification.ts)
+
+```typescript
+// types/notification.ts
+
+export type NotificationChannel = 'whatsapp' | 'telegram' | 'email';
+
+export interface NotificationRequest {
+  channel: NotificationChannel;
+  to: string;                    // +62812... | chat_id | email
+  template?: string;             // template name
+  message?: string;              // raw message (jika tanpa template)
+  data?: Record<string, string>; // template variables
+  priority?: 'high' | 'normal';
+}
+
+export interface NotificationResult {
+  success: boolean;
+  messageId?: string;
+  channel: NotificationChannel;
+  error?: string;
+}
+
+export interface NotificationProvider {
+  send(request: NotificationRequest): Promise<NotificationResult>;
+  isConfigured(): boolean;
+}
+```
+
+---
+
+## Core: Notification Service (Orchestrator)
+
+```typescript
+// notification.service.ts
+
+export class NotificationService {
+  private providers: Map<NotificationChannel, NotificationProvider> = new Map();
+  private templates: TemplateEngine;
+
+  registerProvider(channel: NotificationChannel, provider: NotificationProvider) {
+    this.providers.set(channel, provider);
+  }
+
+  async send(request: NotificationRequest): Promise<NotificationResult> {
+    const provider = this.providers.get(request.channel);
+    if (!provider?.isConfigured()) {
+      return { success: false, channel: request.channel, error: `${request.channel} not configured` };
+    }
+
+    const result = await provider.send(request);
+
+    // Log untuk observability (tanpa data sensitif)
+    logger.info('notification.sent', {
+      channel: request.channel,
+      template: request.template,
+      success: result.success,
+      recipient: maskRecipient(request.to),
+    });
+
+    return result;
+  }
+}
+```
+
+---
+
+## Core: Multi-Channel Fallback
+
+```typescript
+async function sendCriticalNotification(user: User, payload: NotificationPayload) {
+  const channels: NotificationChannel[] = ['whatsapp', 'email'];
+
+  for (const channel of channels) {
+    const to = channel === 'email' ? user.email : user.phone;
+    if (!to) continue;
+
+    const result = await notifier.send({ channel, to, ...payload });
+    if (result.success) return result;
+  }
+
+  throw new Error('All notification channels failed');
+}
+```
+
+---
+
 ## Example 1: Fonnte WhatsApp Adapter
 
 ```typescript
@@ -97,6 +184,53 @@ export class FonnteWhatsAppProvider implements NotificationProvider {
         error: error.response?.data?.reason || error.message,
       };
     }
+  }
+}
+```
+
+---
+
+## Example 1b: Fonnte (Varian Ringkas)
+
+Varian dengan token + sender opsional, tanpa map template di constructor.
+
+```typescript
+// adapters/whatsapp-fonnte.adapter.ts
+
+export class FonnteWhatsAppProvider implements NotificationProvider {
+  constructor(private token: string, private sender?: string) {}
+
+  isConfigured(): boolean {
+    return !!this.token;
+  }
+
+  async send(request: NotificationRequest): Promise<NotificationResult> {
+    try {
+      const response = await axios.post(
+        'https://api.fonnte.com/send',
+        new URLSearchParams({
+          target: normalizePhone(request.to),
+          message: this.renderMessage(request),
+          ...(this.sender && { countryCode: '62' }),
+        }),
+        {
+          headers: { Authorization: this.token },
+        }
+      );
+
+      return {
+        success: response.data.status === true,
+        messageId: response.data.id?.[0]?.toString(),
+        channel: 'whatsapp',
+      };
+    } catch (error: any) {
+      return { success: false, channel: 'whatsapp', error: error.message };
+    }
+  }
+
+  private renderMessage(request: NotificationRequest): string {
+    if (request.message) return request.message;
+    return renderTemplate(request.template!, request.data || {});
   }
 }
 ```
@@ -431,6 +565,34 @@ SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 SMTP_USER=you@gmail.com
 SMTP_PASS=xxxx xxxx xxxx xxxx
+```
+
+---
+
+## Configuration (.env)
+
+```bash
+# .env
+
+# WhatsApp - Fonnte
+WA_PROVIDER=fonnte
+FONNTE_TOKEN=xxx
+
+# WhatsApp - Wablas (alternative)
+WABLAS_TOKEN=xxx
+
+# WhatsApp - Meta Cloud API (official)
+META_WA_TOKEN=xxx
+META_WA_PHONE_ID=xxx
+
+# Telegram
+TELEGRAM_BOT_TOKEN=xxx
+
+# Email (SMTP)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=notif@yourdomain.com
+SMTP_PASS=app-password
 ```
 
 ---

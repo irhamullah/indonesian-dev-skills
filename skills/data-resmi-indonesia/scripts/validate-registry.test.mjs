@@ -71,3 +71,7 @@ test("diverifikasi_pada tua dilaporkan STALE_VERIFICATION tapi tidak menggagalka
   assert.equal(findings[0].code, "STALE_VERIFICATION");
   assert.equal(ok, true);
 });
+
+test("beberapa kategori, masing-masing lengkap, diterima", () => {
+  assert.equal(validateRegistry({ aturanDir: fixture("multi-kategori-ok") }).ok, true);
+});

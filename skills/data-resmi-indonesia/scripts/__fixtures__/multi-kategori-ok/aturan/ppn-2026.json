@@ -1,0 +1,13 @@
+{
+  "aturan": "FIXTURE banyak kategori",
+  "jenis": "bracket",
+  "dasar_hukum": "fixture",
+  "berlaku_dari": "2026-01-01",
+  "berlaku_sampai": "2026-12-31",
+  "sumber": "https://example.invalid/fixture",
+  "diverifikasi_pada": "2026-11-08",
+  "kategori": {
+    "A": [{ "batas_atas": null, "tarif": 0.01 }],
+    "B": [{ "batas_atas": null, "tarif": 0.02 }]
+  }
+}

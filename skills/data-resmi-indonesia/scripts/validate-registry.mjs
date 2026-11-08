@@ -138,12 +138,38 @@ function scanProse(proseFiles, findings) {
 }
 
 function checkBracket(data, file, findings) {
-  const kategori = data.kategori !== null && typeof data.kategori === "object" ? data.kategori : {};
-  const entries = [];
-  for (const arr of Object.values(kategori)) {
-    if (Array.isArray(arr)) entries.push(...arr);
+  const kategori =
+    data.kategori !== null && typeof data.kategori === "object" && !Array.isArray(data.kategori)
+      ? data.kategori
+      : {};
+  const names = Object.keys(kategori);
+  if (names.length === 0) {
+    findings.push({
+      file,
+      code: "MISSING_FIELD",
+      message: "jenis 'bracket' wajib punya objek 'kategori'",
+    });
+    return;
   }
-  const ceilings = entries.map((e) => (e && e.batas_atas !== undefined ? e.batas_atas : null));
+
+  // Tiap kategori adalah jadwal lengkap yang berdiri sendiri (mis. TER A/B/C),
+  // jadi kontinuitas dicek per kategori — bukan digabung lintas kategori.
+  for (const kode of names) {
+    const arr = kategori[kode];
+    if (!Array.isArray(arr)) {
+      findings.push({
+        file,
+        code: "MISSING_FIELD",
+        message: `kategori '${kode}' wajib array entri bracket`,
+      });
+      continue;
+    }
+    checkBracketSeries(arr, file, kode, findings);
+  }
+}
+
+function checkBracketSeries(arr, file, kode, findings) {
+  const ceilings = arr.map((e) => (e && e.batas_atas !== undefined ? e.batas_atas : null));
 
   // Cakupan tutup lebih awal: null di tengah berarti tier berhenti sebelum entri
   // terakhir, sehingga nilai di atasnya tidak punya tier (celah).
@@ -152,7 +178,7 @@ function checkBracket(data, file, findings) {
       findings.push({
         file,
         code: "BRACKET_GAP",
-        message: `batas_atas null pada posisi ${i + 1} dari ${ceilings.length} — rentang tertutup lebih awal, ada celah di atasnya`,
+        message: `kategori '${kode}': batas_atas null pada posisi ${i + 1} dari ${ceilings.length} — rentang tertutup lebih awal, ada celah di atasnya`,
       });
       break;
     }
@@ -165,7 +191,7 @@ function checkBracket(data, file, findings) {
       findings.push({
         file,
         code: "BRACKET_OVERLAP",
-        message: `batas_atas ${numeric[i]} tidak lebih besar dari ${numeric[i - 1]} — tumpang tindih`,
+        message: `kategori '${kode}': batas_atas ${numeric[i]} tidak lebih besar dari ${numeric[i - 1]} — tumpang tindih`,
       });
       break;
     }
@@ -175,7 +201,7 @@ function checkBracket(data, file, findings) {
     findings.push({
       file,
       code: "NO_TERMINAL",
-      message: "entri terakhir wajib batas_atas null (penutup rentang)",
+      message: `kategori '${kode}': entri terakhir wajib batas_atas null (penutup rentang)`,
     });
   }
 }

@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -69,9 +69,72 @@ export function validateRegistry({ aturanDir, proseFiles = [] }) {
         });
       }
     }
+
+    checkDates(data, file, findings);
   }
 
-  return { findings, ok: findings.length === 0 };
+  scanProse(proseFiles, findings);
+
+  return { findings, ok: findings.every((f) => f.severity === "warning") };
+}
+
+function checkDates(data, file, findings) {
+  const effective = data.berlaku_dari ? Date.parse(data.berlaku_dari) : NaN;
+  if (!Number.isNaN(effective) && effective > Date.now()) {
+    findings.push({
+      file,
+      code: "FUTURE_EFFECTIVE",
+      message: `berlaku_dari '${data.berlaku_dari}' berada di masa depan`,
+      severity: "error",
+    });
+  }
+
+  const verified = data.diverifikasi_pada ? Date.parse(data.diverifikasi_pada) : NaN;
+  if (!Number.isNaN(verified) && Date.now() - verified > 400 * 86_400_000) {
+    findings.push({
+      file,
+      code: "STALE_VERIFICATION",
+      message: `diverifikasi_pada '${data.diverifikasi_pada}' lebih dari 400 hari lalu — perlu verifikasi ulang`,
+      severity: "warning",
+    });
+  }
+}
+
+const NUMBER_IN_PROSE = /\b\d+(?:[.,]\d+)?\s*%|\bRp\s?\d/;
+
+function scanProse(proseFiles, findings) {
+  for (const file of proseFiles) {
+    if (path.basename(file) === "examples.md") continue;
+
+    let text;
+    try {
+      text = readFileSync(file, "utf8");
+    } catch {
+      continue;
+    }
+
+    const lines = text.split(/\r?\n/);
+    let inFence = false;
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      if (/^\s*```/.test(line)) {
+        inFence = !inFence;
+        continue;
+      }
+      if (inFence) continue;
+      if (/\]\(/.test(line)) continue;
+      if (/\*\*Files:\*\*/.test(line)) continue;
+
+      if (NUMBER_IN_PROSE.test(line)) {
+        findings.push({
+          file,
+          code: "NUMBER_IN_PROSE",
+          message: `baris ${i + 1}: angka aturan di prosa — pindahkan ke JSON registry (${line.trim().slice(0, 80)})`,
+          severity: "error",
+        });
+      }
+    }
+  }
 }
 
 function checkBracket(data, file, findings) {
@@ -127,10 +190,23 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
       : path.resolve(here, "..", "..", "..");
 
   const aturanDir = path.join(repoRoot, "skills", "data-resmi-indonesia", "references", "aturan");
-  const { findings, ok } = validateRegistry({ aturanDir });
+
+  const proseFiles = [];
+  const skillMd = path.join(repoRoot, "skills", "data-resmi-indonesia", "SKILL.md");
+  if (existsSync(skillMd)) proseFiles.push(skillMd);
+  try {
+    for (const name of readdirSync(aturanDir)) {
+      if (name.endsWith(".md")) proseFiles.push(path.join(aturanDir, name));
+    }
+  } catch {
+    // references/aturan belum ada — belum ada registry, tidak ada prosa aturan
+  }
+
+  const { findings, ok } = validateRegistry({ aturanDir, proseFiles });
 
   for (const f of findings) {
-    console.log(`${path.relative(repoRoot, f.file)}: ${f.code} — ${f.message}`);
+    const label = f.severity === "warning" ? "WARN" : "FAIL";
+    console.log(`${label} ${path.relative(repoRoot, f.file)}: ${f.code} — ${f.message}`);
   }
   if (findings.length === 0) {
     console.log("validate-registry: OK");

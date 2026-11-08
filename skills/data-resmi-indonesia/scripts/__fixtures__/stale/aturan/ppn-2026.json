@@ -1,0 +1,12 @@
+{
+  "aturan": "FIXTURE verifikasi kedaluwarsa",
+  "jenis": "bracket",
+  "dasar_hukum": "fixture",
+  "berlaku_dari": "2026-01-01",
+  "berlaku_sampai": null,
+  "sumber": "https://example.invalid/fixture",
+  "diverifikasi_pada": "2025-01-01",
+  "kategori": {
+    "P": [{ "batas_atas": null, "tarif": 0.11 }]
+  }
+}

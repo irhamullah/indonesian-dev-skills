@@ -45,3 +45,29 @@ test("jenis daftar dan komponen lolos tanpa cek rentang", () => {
   assert.equal(validateRegistry({ aturanDir: fixture("daftar-ok") }).ok, true);
   assert.equal(validateRegistry({ aturanDir: fixture("komponen-ok") }).ok, true);
 });
+
+test("angka tarif di prosa dilaporkan NUMBER_IN_PROSE", () => {
+  const prose = [path.join(here, "__fixtures__", "prosa", "aturan", "ppn.md")];
+  const { findings } = validateRegistry({
+    aturanDir: fixture("prosa"),
+    proseFiles: prose,
+  });
+  assert.equal(findings.some((f) => f.code === "NUMBER_IN_PROSE"), true);
+});
+
+test("angka di examples.md tidak dipindai", () => {
+  const prose = [path.join(here, "__fixtures__", "prosa", "examples.md")];
+  const { findings } = validateRegistry({ aturanDir: fixture("prosa"), proseFiles: prose });
+  assert.equal(findings.some((f) => f.code === "NUMBER_IN_PROSE"), false);
+});
+
+test("berlaku_dari di masa depan dilaporkan FUTURE_EFFECTIVE", () => {
+  const { findings } = validateRegistry({ aturanDir: fixture("future") });
+  assert.equal(findings[0].code, "FUTURE_EFFECTIVE");
+});
+
+test("diverifikasi_pada tua dilaporkan STALE_VERIFICATION tapi tidak menggagalkan", () => {
+  const { ok, findings } = validateRegistry({ aturanDir: fixture("stale") });
+  assert.equal(findings[0].code, "STALE_VERIFICATION");
+  assert.equal(ok, true);
+});

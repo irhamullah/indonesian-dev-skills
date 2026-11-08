@@ -1,0 +1,12 @@
+{
+  "aturan": "FIXTURE berlaku di masa depan",
+  "jenis": "bracket",
+  "dasar_hukum": "fixture",
+  "berlaku_dari": "2031-01-01",
+  "berlaku_sampai": null,
+  "sumber": "https://example.invalid/fixture",
+  "diverifikasi_pada": "2026-11-08",
+  "kategori": {
+    "P": [{ "batas_atas": null, "tarif": 0.11 }]
+  }
+}

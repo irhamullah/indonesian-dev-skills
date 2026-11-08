@@ -1,0 +1,10 @@
+{
+  "aturan": "FIXTURE daftar",
+  "jenis": "daftar",
+  "dasar_hukum": "fixture",
+  "berlaku_dari": "2026-01-01",
+  "berlaku_sampai": null,
+  "sumber": "https://example.invalid/fixture",
+  "diverifikasi_pada": "2026-11-08",
+  "entri": [{ "kunci": "ACEH", "nilai": 1, "satuan": "IDR" }]
+}

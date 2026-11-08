@@ -1,0 +1,17 @@
+{
+  "aturan": "FIXTURE celah",
+  "jenis": "bracket",
+  "dasar_hukum": "fixture",
+  "berlaku_dari": "2026-01-01",
+  "berlaku_sampai": null,
+  "sumber": "https://example.invalid/fixture",
+  "diverifikasi_pada": "2026-11-08",
+  "kategori": {
+    "P": [
+      { "batas_atas": 1000, "tarif": 0.1 },
+      { "batas_atas": null, "tarif": 0.2 },
+      { "batas_atas": 3000, "tarif": 0.3 },
+      { "batas_atas": null, "tarif": 0.4 }
+    ]
+  }
+}

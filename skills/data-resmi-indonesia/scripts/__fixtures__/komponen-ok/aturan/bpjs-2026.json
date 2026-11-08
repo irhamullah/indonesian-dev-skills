@@ -1,0 +1,12 @@
+{
+  "aturan": "FIXTURE komponen",
+  "jenis": "komponen",
+  "dasar_hukum": "fixture",
+  "berlaku_dari": "2026-01-01",
+  "berlaku_sampai": null,
+  "sumber": "https://example.invalid/fixture",
+  "diverifikasi_pada": "2026-11-08",
+  "komponen": [
+    { "nama": "JKK", "batas_upah": null, "tarif_pemberi": 0.0024, "tarif_pekerja": 0 }
+  ]
+}

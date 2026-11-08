@@ -25,3 +25,23 @@ test("JSON rusak dilaporkan JSON_PARSE, bukan crash", () => {
   assert.equal(ok, false);
   assert.equal(findings[0].code, "JSON_PARSE");
 });
+
+test("bracket bercelah dilaporkan BRACKET_GAP", () => {
+  const { findings } = validateRegistry({ aturanDir: fixture("gap") });
+  assert.equal(findings[0].code, "BRACKET_GAP");
+});
+
+test("bracket tumpang tindih dilaporkan BRACKET_OVERLAP", () => {
+  const { findings } = validateRegistry({ aturanDir: fixture("overlap") });
+  assert.equal(findings[0].code, "BRACKET_OVERLAP");
+});
+
+test("tanpa entri penutup batas_atas null dilaporkan NO_TERMINAL", () => {
+  const { findings } = validateRegistry({ aturanDir: fixture("no-terminal") });
+  assert.equal(findings[0].code, "NO_TERMINAL");
+});
+
+test("jenis daftar dan komponen lolos tanpa cek rentang", () => {
+  assert.equal(validateRegistry({ aturanDir: fixture("daftar-ok") }).ok, true);
+  assert.equal(validateRegistry({ aturanDir: fixture("komponen-ok") }).ok, true);
+});

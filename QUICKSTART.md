@@ -1,5 +1,8 @@
 # 🚀 Quick Start - Indonesian Developer Skills
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-1.4.0-blue.svg)](CHANGELOG.md)
+
 Skill bundle untuk workflow khas Indonesian developers. Saat ini berisi **5 skill**.
 
 ## 📦 What's Included

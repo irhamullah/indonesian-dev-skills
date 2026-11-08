@@ -1,140 +1,111 @@
-# Indonesian Developer Skills
+<div align="center">
 
-Skill bundle untuk workflow khas Indonesian developers. Setiap skill fokus pada pain point implementasi yang spesifik untuk ekosistem Indonesia.
+# 🇮🇩 Indonesian Developer Skills
 
-## 🇮🇩 Why This Bundle?
+**Skill bundle untuk OpenCode & AI coding agents** — dibangun khusus untuk alur kerja developer Indonesia.
 
-Indonesian developers punya pain points unik:
-- Payment gateway lokal (Midtrans, Xendit, Doku) dengan format berbeda-beda
-- Deploy di VPS lokal (Biznet Gio, IDCloudHost, Niagahoster)
-- Data Indonesia (provinsi/kota, NIK/NPWP validation, format Rupiah)
-- Data resmi & aturan berperiode Indonesia (BMKG, BPS, Bank Indonesia, pajak, upah minimum, hari libur)
-- Notifikasi via WhatsApp/Telegram (WhatsApp gateway berbeda-beda + OTP yang aman)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-1.4.0-blue.svg)](CHANGELOG.md)
+[![Skills](https://img.shields.io/badge/skills-5-green.svg)](#-skills-included)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-Skill bundle ini solve masalah-masalah yang **specific ke Indonesia** dan belum ada di skill bundle lain.
+*Payment gateway lokal · Deploy VPS Indonesia · Data & formulir Indonesia · Notifikasi · Data resmi & aturan 2026 — siap pakai, production-ready.*
 
-## 📦 Skills Included
+</div>
 
-### 1. Payment Gateway Indonesia ✅
+---
 
-**Status:** Complete
+## Kenapa Bundle Ini?
 
-Integrasi payment gateway lokal (Midtrans, Xendit, Doku) dengan unified normalization layer.
+Developer Indonesia menghadapi **pain point unik** yang tidak dicakup skill bundle umum:
+
+- 🏦 Gateway pembayaran lokal (Midtrans, Xendit, Doku) dengan **format & webhook signature berbeda-beda**
+- ☁️ Deploy ke **VPS lokal** (Biznet Gio, IDCloudHost, Niagahoster, Rumahweb) & shared hosting cPanel
+- 📋 Validasi **NIK/NPWP**, wilayah administratif, format nomor HP, ongkir, Rupiah, timezone WIB/WITA/WIT
+- 📲 Notifikasi via **WhatsApp** (Fonnte, Wablas, Watzap, Meta Cloud API), Telegram, dan Email
+- 🧾 **Data resmi** (BMKG, BPS, Bank Indonesia, Bapanas, Kemenag) & **aturan berperiode 2026** (PTKP, PPh 21 TER, PPN, BPJS, UMP) dalam registry JSON yang divalidasi otomatis
+
+Semua skill **100% dibuat dari pain point nyata**, bukan repackage skill umum. Solusi **production-ready** dengan contoh implementasi lengkap, bukan sekadar konsep.
+
+---
+
+## ✨ Skills Included
+
+| # | Skill | Fokus Utama |
+| --- | --- | --- |
+| 1 | **Payment Gateway Indonesia** | Midtrans, Xendit, Doku — webhook verification, status mapping, sandbox, QRIS/VA/e-wallet |
+| 2 | **Hosting & Deployment Indonesia** | Deploy Laravel/Node.js ke VPS lokal & cPanel — Nginx, SSL, Supervisor, backup, zero-downtime |
+| 3 | **Indonesian Data & Forms** | Wilayah administratif, NIK/NPWP, nomor HP (+62), ongkir (RajaOngkir/Biteship), Rupiah, timezone |
+| 4 | **Notifikasi Indonesia** | WhatsApp (Fonnte, Wablas, Watzap, Meta Cloud API), Telegram, Email — OTP aman, fallback multi-channel |
+| 5 | **Data Resmi Indonesia** | BMKG, BPS, Bank Indonesia (JISDOR/kurs), Bapanas, hari libur, kalender Hijriah/Jawa, jadwal sholat, direktori, aturan 2026 |
+
+### Detail Skill
+
+<details>
+<summary><b>1. Payment Gateway Indonesia</b> — Midtrans, Xendit, Doku</summary>
 
 **Solves:**
-- ✅ Webhook signature verification berbeda-beda
-- ✅ Status mapping tidak konsisten
-- ✅ Sandbox testing setup
+- ✅ Webhook signature verification (SHA-512 Midtrans, HMAC-SHA256 Xendit)
+- ✅ Status mapping yang konsisten antar-provider
+- ✅ Sandbox testing setup (URL, kredensial, webhook ngrok)
 - ✅ QRIS, Virtual Account, e-wallet (GoPay, OVO, DANA, ShopeePay)
 
-**Use when:**
-- Integrating Indonesian payment gateways
-- Handling webhooks dari Midtrans/Xendit/Doku
-- Mapping payment status
-- Testing payment integration
+**Use when:** integrasi payment gateway Indonesia, verifikasi webhook, mapping status, testing sandbox.
 
-**Files:**
-- `SKILL.md` - Main workflow
-- `examples.md` - Complete implementation (Midtrans, Xendit, Doku adapters)
-- `references/provider-comparison.md` - Side-by-side comparison
-- `references/webhook-verification.md` - Signature algorithms
-- `references/status-mapping.md` - Complete status mapping table
-- `references/sandbox-setup.md` - Testing guide
+**Files:** `SKILL.md` · `examples.md` (adapter lengkap) · `references/provider-comparison.md` · `references/webhook-verification.md` · `references/status-mapping.md` · `references/sandbox-setup.md`
+</details>
 
-### 2. Hosting & Deployment Indonesia ✅
-
-**Status:** Complete
-
-Deploy Laravel/Node.js ke VPS lokal (IDCloudHost, Niagahoster, Rumahweb, Biznet Gio) atau shared hosting cPanel.
+<details>
+<summary><b>2. Hosting & Deployment Indonesia</b> — VPS lokal & cPanel</summary>
 
 **Solves:**
-- ✅ Supervisor queue worker config (selalu lupa config)
+- ✅ Supervisor queue worker config (selalu lupa)
 - ✅ SSL Let's Encrypt + auto-renewal (renewal gagal)
-- ✅ Nginx reverse proxy untuk Node.js (WebSocket tricky)
-- ✅ Database backup automation (sering skip)
-- ✅ Initial server setup & hardening (lupa urutan)
-- ✅ Zero-downtime deployment (deploy bikin down)
+- ✅ Nginx reverse proxy untuk Node.js (WebSocket)
+- ✅ Database backup automation
+- ✅ Initial server setup & hardening
+- ✅ Zero-downtime deployment
 - ✅ cPanel shared hosting deployment
 
-**Use when:**
-- Deploy Laravel/Node.js ke VPS Indonesia
-- Setup Nginx, SSL, Supervisor
-- Deploy ke shared hosting cPanel
+**Use when:** deploy Laravel/Node.js ke VPS Indonesia, setup Nginx/SSL/Supervisor, deploy cPanel.
 
-**Files:**
-- `SKILL.md` - Main workflow (VPS + cPanel)
-- `references/supervisor-config.md` - Queue worker setup
-- `references/ssl-letsencrypt.md` - SSL setup & troubleshooting
-- `references/nginx-reverse-proxy.md` - Reverse proxy Node.js
-- `references/database-backup.md` - Backup automation
-- `references/initial-server-setup.md` - Server hardening
-- `references/zero-downtime-deployment.md` - Deploy strategies
-- `references/cpanel-deployment.md` - Shared hosting guide
+**Files:** `SKILL.md` · `references/supervisor-config.md` · `references/ssl-letsencrypt.md` · `references/nginx-reverse-proxy.md` · `references/database-backup.md` · `references/initial-server-setup.md` · `references/zero-downtime-deployment.md` · `references/cpanel-deployment.md`
+</details>
 
-### 3. Indonesian Data & Forms ✅
-
-**Status:** Complete
-
-Wilayah administratif, validasi identitas, format data khas Indonesia.
+<details>
+<summary><b>3. Indonesian Data & Forms</b> — validasi & format</summary>
 
 **Solves:**
-- ✅ Wilayah administratif data (provinsi → kelurahan, sering outdated)
-- ✅ NIK & NPWP validation (gampang salah)
+- ✅ Wilayah administratif (provinsi → kelurahan, sering outdated)
+- ✅ NIK & NPWP validation
 - ✅ Format nomor HP (+62 normalization)
 - ✅ Ongkir integration (RajaOngkir, Biteship)
 - ✅ Format Rupiah (float error handling)
 - ✅ Timezone WIB/WITA/WIT
 
-**Use when:**
-- Form alamat dengan dropdown wilayah
-- Validasi NIK/NPWP
-- Normalize nomor HP Indonesia
-- Cek ongkir
-- Format Rupiah
+**Use when:** form alamat dropdown wilayah, validasi NIK/NPWP, normalize nomor HP, cek ongkir, format Rupiah.
 
-**Files:**
-- `SKILL.md` - Main workflow
-- `references/wilayah-administratif.md` - Data wilayah strategy
-- `references/nik-npwp-validation.md` - Identity validation
-- `references/phone-formatting.md` - Phone normalization
-- `references/ongkir-integration.md` - Shipping cost integration
-- `references/rupiah-formatting.md` - Currency handling
-- `references/timezone-indonesia.md` - WIB/WITA/WIT
+**Files:** `SKILL.md` · `references/wilayah-administratif.md` · `references/nik-npwp-validation.md` · `references/phone-formatting.md` · `references/ongkir-integration.md` · `references/rupiah-formatting.md` · `references/timezone-indonesia.md`
+</details>
 
-### 4. Notifikasi Indonesia ✅
-
-**Status:** Complete
-
-Kirim notifikasi via WhatsApp, Telegram, dan Email — channel yang benar-benar dipakai user Indonesia.
+<details>
+<summary><b>4. Notifikasi Indonesia</b> — WhatsApp, Telegram, Email</summary>
 
 **Solves:**
 - ✅ WhatsApp gateway berbeda-beda (Fonnte, Wablas, Watzap, Meta Cloud API)
 - ✅ Unified interface WhatsApp/Telegram/Email
-- ✅ OTP flow yang aman
+- ✅ OTP flow yang aman (crypto-secure, hashed, rate-limited)
 - ✅ Alert internal ke Telegram
 - ✅ Email transaksional & deliverability
 - ✅ Multi-channel fallback
 
-**Use when:**
-- Kirim OTP via WhatsApp
-- Notifikasi transaksi ke customer
-- Alert server ke Telegram/WhatsApp
-- Email transaksional (invoice, reset password)
+**Use when:** kirim OTP via WhatsApp, notifikasi transaksi, alert server, email transaksional.
 
-**Files:**
-- `SKILL.md` - Main workflow (channel abstraction + OTP)
-- `examples.md` - Complete adapters (Fonnte, Wablas, Watzap, Meta, Telegram, Email)
-- `references/whatsapp-gateway.md` - WA gateway guide
-- `references/telegram-bot.md` - Telegram Bot API
-- `references/email-notification.md` - SMTP/Gmail/transactional
-- `references/otp-and-templates.md` - OTP flow & templates
-- `references/provider-comparison.md` - Perbandingan & rekomendasi
+**Files:** `SKILL.md` · `examples.md` (adapter lengkap) · `references/whatsapp-gateway.md` · `references/telegram-bot.md` · `references/email-notification.md` · `references/otp-and-templates.md` · `references/provider-comparison.md`
+</details>
 
-### 5. Data Resmi Indonesia ✅
-
-**Status:** Complete
-
-Data resmi Indonesia (BMKG, BPS, Bank Indonesia, Badan Pangan Nasional, Kemenag) dan aturan berperiode (pajak, BPJS, upah minimum) dalam registry bertanggal.
+<details>
+<summary><b>5. Data Resmi Indonesia</b> — data resmi & aturan 2026</summary>
 
 **Solves:**
 - ✅ Hari libur nasional & cuti bersama (SKB 3 Menteri)
@@ -143,170 +114,144 @@ Data resmi Indonesia (BMKG, BPS, Bank Indonesia, Badan Pangan Nasional, Kemenag)
 - ✅ Statistik BPS & harga pangan Bapanas
 - ✅ Kalender Hijriah/Jawa & jadwal sholat
 - ✅ Direktori sekolah/rumah sakit/kampus (PDDikti)
-- ✅ Aturan pajak 2026 (PTKP, PPh 21 TER, PPN), BPJS, UMP lewat registry JSON + validator
+- ✅ Aturan pajak 2026 (PTKP, PPh 21 TER, PPN), BPJS, UMP lewat **registry JSON + validator**
 
-**Use when:**
-- Butuh data resmi Indonesia (BMKG, BPS, BI, Bapanas, Kemenag)
-- Butuh aturan berperiode yang angkanya berubah tiap tahun (pajak, BPJS, UMP)
-- Cek hari libur, kalender Hijriah, jadwal sholat
+**Use when:** butuh data resmi Indonesia, butuh aturan berperiode (angkanya berubah tiap tahun), cek hari libur/kalender/jadwal sholat.
 
-**Files:**
-- `SKILL.md` - Main workflow (router data vs aturan)
-- `references/data/*.md` - Panduan per topik data (BMKG, BI, BPS, Bapanas, hari libur, kalender, sholat, direktori)
-- `references/aturan/*.json` - Registry bertanggal angka aturan (pajak, ketenagakerjaan)
-- `scripts/validate-registry.mjs` - Validator registry aturan
-- Catatan: **aturan berperiode** angka-angka ada di registry JSON (`skills/data-resmi-indonesia/references/aturan/`), bukan di prosa.
+**Files:** `SKILL.md` (router data vs aturan) · `references/data/*.md` · `references/aturan/*.json` (registry) · `scripts/validate-registry.mjs`
 
-## 🚀 Installation
+> 🔑 **Keunggulan skill #5:** aturan berperiode angka-angka ada di **registry JSON** (`references/aturan/`), bukan di prosa. Validator memastikan setiap angka punya `sumber` + `diverifikasi_pada` dan tidak bocor ke teks.
+</details>
 
-### Option 1: Direct Install (Recommended)
+---
+
+## 🚀 Instalasi
+
+### Pilihan 1: Instal Langsung (Direkomendasikan)
 
 ```bash
-# Clone ke OpenCode config directory
+# 1. Clone ke direktori konfigurasi OpenCode
 git clone https://github.com/irhamullah/indonesian-dev-skills \
   ~/.config/opencode/indonesian-dev-skills
 
-# Update opencode.jsonc
+# 2. Registrasikan di opencode.jsonc
 {
   "skills": [
     "~/.config/opencode/indonesian-dev-skills/skills"
   ]
 }
 
-# Update AGENTS.md (copy dari AGENTS.md di bundle ini)
+# 3. Tambahkan tabel routing skill ke AGENTS.md OpenCode kamu
 cat ~/.config/opencode/indonesian-dev-skills/AGENTS.md >> ~/.config/opencode/AGENTS.md
 
-# Restart OpenCode
+# 4. Restart OpenCode
 ```
 
-### Option 2: Test Locally First
+### Pilihan 2: Uji Lokal Dulu
 
 ```bash
-# Clone ke temporary directory
 git clone https://github.com/irhamullah/indonesian-dev-skills ~/test-skills
-
-# Update opencode.jsonc
-{
-  "skills": [
-    "~/test-skills/skills"
-  ]
-}
-
-# Test, then move to config directory kalau cocok
+# Tambahkan "~/test-skills/skills" ke skills array di opencode.jsonc
+# Uji, lalu pindahkan kalau cocok
 ```
 
-## 📚 Usage Examples
+### Setelah Instal
 
-### Payment Gateway Integration
+Trigger skill langsung dari chat OpenCode, misalnya:
 
-```typescript
-// Trigger: "integrate Midtrans payment gateway"
-// or: "setup payment dengan QRIS dan Virtual Account"
-
-// Skill akan guide kamu:
-// 1. Define normalized interface
-// 2. Implement adapter per provider
-// 3. Setup webhook verification
-// 4. Test di sandbox
+```
+"Setup Midtrans payment gateway dengan QRIS"
+"Deploy Laravel ke IDCloudHost"
+"Validasi NIK"
+"Kirim OTP WhatsApp"
+"Jadwal sholat hari ini"
+"Berapa PPh 21 TER untuk penghasilan 15 juta?"
 ```
 
-### Quick Reference
+---
+
+## 🧪 Menjalankan Validator (Skill #5)
 
 ```bash
-# Check which provider supports what
-→ See references/provider-comparison.md
-
-# Verify webhook signature not working?
-→ See references/webhook-verification.md
-
-# Payment status confusing?
-→ See references/status-mapping.md
-
-# Setup sandbox testing
-→ See references/sandbox-setup.md
+node skills/data-resmi-indonesia/scripts/validate-registry.mjs
 ```
 
-### Notifikasi WhatsApp / Telegram / Email
+Harapkan exit code `0`. Jalankan tiap kali mengubah/menambah aturan di `references/aturan/*.json`.
 
-```typescript
-// Trigger: "kirim OTP via WhatsApp"
-// or: "alert server ke Telegram", "email invoice transaksional"
-
-// Skill akan guide kamu:
-// 1. Define unified NotificationProvider interface
-// 2. Implement adapter (Fonnte/Wablas/Watzap/Meta, Telegram, Email)
-// 3. OTP flow aman (crypto-secure, hashed, rate-limited)
-// 4. Multi-channel fallback
-```
-
-```bash
-# Pilih WA gateway (official vs unofficial)?
-→ See references/provider-comparison.md
-
-# Setup Fonnte/Wablas/Watzap/Meta Cloud API?
-→ See references/whatsapp-gateway.md
-
-# Alert server ke Telegram?
-→ See references/telegram-bot.md
-
-# OTP flow & template?
-→ See references/otp-and-templates.md
-```
+---
 
 ## 🎯 Design Principles
 
-1. **Original, not derivative** - Tidak copy/repackage existing skills
-2. **Indonesia-specific** - Solve pain points unique to Indonesian devs
-3. **Production-ready** - Complete implementation, not just concepts
-4. **Maintainable** - Clear abstraction layers, easy to extend
-5. **Well-documented** - Examples, references, troubleshooting guides
+1. **Original, not derivative** — tidak repackage skill umum
+2. **Indonesia-specific** — solve pain point unik developer Indonesia
+3. **Production-ready** — implementasi lengkap, bukan hanya konsep
+4. **Maintainable** — abstraksi jelas, mudah diekstensi
+5. **Well-documented** — contoh, referensi, troubleshooting
 
-## 🆚 What Makes This Different
+| Aspek | Skill bundle umum | Indonesian Dev Skills |
+| --- | --- | --- |
+| **Fokus** | Praktik umum | Implementasi khusus Indonesia |
+| **Scope** | Pola framework-agnostic | Dalam di ekosistem lokal (payment, hosting, data, notifikasi) |
+| **Contoh** | Konsep abstrak | Production-ready, konteks Indonesia |
+| **Cakupan** | Luas & dangkal | Sempit & dalam |
 
-| Aspect | Typical skill bundles | Indonesian Dev Skills |
-|--------|----------------------|----------------------|
-| **Focus** | General software practices | Indonesian-specific implementations |
-| **Scope** | Framework-agnostic patterns | Deep on local ecosystem (payment, hosting, data, notifikasi) |
-| **Examples** | Abstract concepts | Production-ready, Indonesia-context |
-| **Coverage** | Broad & shallow | Narrow & deep |
+---
 
-**Key differentiator:** Kami fokus ke **implementation-specific workflows khas Indonesia** — bukan general development practices.
+## 🤝 Berkontribusi
 
-## 🤝 Contributing
+Kontribusi sangat diterima! Punya pain point developer Indonesia lain yang belum ada?
 
-Contributions welcome! Punya pain point Indonesian developer lain yang belum ada?
+- Fork repo & buat skill baru di `skills/your-skill-name/`
+- Gunakan `skills/payment-gateway-indonesia/` sebagai template
+- Sertakan contoh kode yang berfungsi
+- Untuk skill #5: tambahkan aturan hanya via registry JSON, jalankan validator
+- Detail lengkap: lihat [`CONTRIBUTING.md`](CONTRIBUTING.md)
 
-### Adding New Skills
+---
 
-1. Fork repo
-2. Create skill folder di `skills/your-skill-name/`
-3. Copy `skills/payment-gateway-indonesia/` sebagai template
-4. Update `SKILL.md` dengan workflow konkrit
-5. Add examples dan references
-6. Update `AGENTS.md` dengan trigger mapping
-7. Submit PR
+## 📊 Project Stats
 
-### Contribution Guidelines
+```
+Skills    : 5 (masing-masing SKILL.md + examples/references)
+Struktur  : skills/<nama-skill>/{SKILL.md, examples.md, references/}
+Validator  : skills/data-resmi-indonesia/scripts/validate-registry.mjs
+Lisensi   : MIT
+```
 
-- ✅ Skill harus **specific ke Indonesia**
-- ✅ Include working code examples
-- ✅ Add testing guide
-- ✅ Fokus pada pain point Indonesia (bukan duplikasi general practices)
-- ✅ Production-ready quality
+---
 
-## 📝 License
+## 🗺️ Struktur Repo
 
-MIT License - Free to use, modify, and distribute.
+```
+.
+├── README.md
+├── AGENTS.md               # tabel routing skill (untuk OpenCode)
+├── QUICKSTART.md           # mulai cepat
+├── CHANGELOG.md            # riwayat versi
+├── CONTRIBUTING.md         # panduan kontribusi
+├── LICENSE                  # MIT
+└── skills/
+    ├── payment-gateway-indonesia/
+    ├── hosting-deployment-indonesia/
+    ├── indonesian-data-forms/
+    ├── notifikasi-indonesia/
+    └── data-resmi-indonesia/
+        ├── SKILL.md
+        ├── examples.md
+        ├── references/data/    # panduan per topik
+        ├── references/aturan/  # registry JSON 2026
+        └── scripts/validate-registry.mjs
+```
 
-## 🙏 Credits
+---
 
-Created by Indonesian developers, for Indonesian developers.
+## 🆚 Versi & Changelog
 
-Special thanks to:
-- Indonesian developer community for pain point feedback
-- Everyone who contributed ideas, reviews, and testing
+Lihat [`CHANGELOG.md`](CHANGELOG.md) untuk riwayat lengkap. Versi terbaru: **v1.4.0**.
 
-## 📮 Support
+---
+
+## 📮 Dukungan & Kontak
 
 - **Issues**: https://github.com/irhamullah/indonesian-dev-skills/issues
 - **Discussions**: https://github.com/irhamullah/indonesian-dev-skills/discussions
@@ -314,4 +259,6 @@ Special thanks to:
 
 ---
 
-**Built with ❤️ by Indonesian developers**
+> **Built with ❤️ oleh Indonesian developers, untuk Indonesian developers.**
+
+Distributed under the [MIT License](LICENSE).

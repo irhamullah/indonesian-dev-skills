@@ -1,0 +1,20 @@
+{
+  "aturan": "Iuran BPJS (Kesehatan dan Ketenagakerjaan) untuk pekerja penerima upah",
+  "jenis": "komponen",
+  "dasar_hukum": "PP 44/2015 (JKK, JKM), PP 45/2015 (JP), PP 46/2015 (JHT), Perpres 82/2018 jo. Perpres 59/2024 (Jaminan Kesehatan), SE BPJS Ketenagakerjaan No. B/3307/022026 (batas upah JP 2026)",
+  "berlaku_dari": "2026-03-01",
+  "berlaku_sampai": "2026-12-31",
+  "sumber": "https://www.bpjsketenagakerjaan.go.id/assets/uploads/peraturan/15122015_104557_PP%2044%20Tahun%202015.pdf",
+  "diverifikasi_pada": "2026-11-08",
+  "komponen": [
+    { "nama": "JKK risiko sangat rendah", "batas_upah": null, "tarif_pemberi": 0.0024, "tarif_pekerja": 0 },
+    { "nama": "JKK risiko rendah", "batas_upah": null, "tarif_pemberi": 0.0054, "tarif_pekerja": 0 },
+    { "nama": "JKK risiko sedang", "batas_upah": null, "tarif_pemberi": 0.0089, "tarif_pekerja": 0 },
+    { "nama": "JKK risiko tinggi", "batas_upah": null, "tarif_pemberi": 0.0127, "tarif_pekerja": 0 },
+    { "nama": "JKK risiko sangat tinggi", "batas_upah": null, "tarif_pemberi": 0.0174, "tarif_pekerja": 0 },
+    { "nama": "JKM", "batas_upah": null, "tarif_pemberi": 0.003, "tarif_pekerja": 0 },
+    { "nama": "JHT", "batas_upah": null, "tarif_pemberi": 0.037, "tarif_pekerja": 0.02 },
+    { "nama": "JP", "batas_upah": 11086300, "tarif_pemberi": 0.02, "tarif_pekerja": 0.01 },
+    { "nama": "BPJS Kesehatan PPU", "batas_upah": 12000000, "tarif_pemberi": 0.04, "tarif_pekerja": 0.01 }
+  ]
+}

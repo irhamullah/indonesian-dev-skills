@@ -1,0 +1,11 @@
+{
+  "aturan": "PPN",
+  "jenis": "bracket",
+  "dasar_hukum": "UU 7/2021",
+  "berlaku_dari": "2026-01-01",
+  "berlaku_sampai": null,
+  "diverifikasi_pada": "2026-11-08",
+  "kategori": {
+    "P": [{ "batas_atas": null, "tarif": 0.11 }]
+  }
+}

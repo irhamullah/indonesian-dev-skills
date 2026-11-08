@@ -283,13 +283,21 @@ cat ~/.config/opencode/indonesian-dev-skills/AGENTS.md >> ~/.config/opencode/AGE
 
 ---
 
-## 🧪 Running the Validator (Skill #5)
+## 🧪 Running the Validator (Skill #5 & #6)
+
+Skill #5 (official data) has a registry validator:
 
 ```bash
 node skills/data-resmi-indonesia/scripts/validate-registry.mjs
 ```
 
 Expect exit code `0`. Run it every time you change/add a rate in `references/aturan/*.json`.
+
+All skills (including #6) are validated by the frontmatter/link validator:
+
+```bash
+node scripts/validate-skills.mjs
+```
 
 ---
 

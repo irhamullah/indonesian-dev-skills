@@ -185,8 +185,9 @@ function RupiahInput({ value, onChange }) {
 ## Percentage & Tax Calculation
 
 ```typescript
-// PPN (VAT) = 11% (as of 2024)
-const PPN_RATE = 0.11;
+// Tarif PPN adalah aturan berperiode — ambil dari registry skill `data-resmi-indonesia`
+// (references/aturan/ppn-2026.json) alih-alih hardcode di sini.
+const PPN_RATE = 0.11;  // sebagai default; verifikasi angka terbaru di registry
 
 export function calculatePPN(amount: number): number {
   return Math.round(amount * PPN_RATE);
@@ -402,6 +403,6 @@ describe('Rupiah Formatting', () => {
 - [ ] Parse handle both `.` dan `,` separators
 - [ ] API returns integer, client formats
 - [ ] Input masking untuk UX
-- [ ] PPN calculation correct (11% as of 2024)
+- [ ] PPN calculation correct — pakai tarif dari registry `data-resmi-indonesia` (references/aturan/ppn-2026.json)
 - [ ] Discount dengan proper capping
 - [ ] Tests untuk edge cases (rounding, cap, zero)

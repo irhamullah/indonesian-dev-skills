@@ -132,7 +132,7 @@ Body (JSON):
 
 **API:**
 ```
-POST https://graph.facebook.com/v20.0/{PHONE_NUMBER_ID}/messages
+POST https://graph.facebook.com/v26.0/{PHONE_NUMBER_ID}/messages   # cek versi terbaru di changelog Meta
 Header: Authorization: Bearer <access_token>
 Content-Type: application/json
 

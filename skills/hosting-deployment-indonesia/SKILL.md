@@ -177,8 +177,8 @@ sudo systemctl enable redis-server
 #### Option B: Node.js Stack
 
 ```bash
-# 1. Install Node.js 20 LTS
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+# 1. Install Node.js LTS (saat ini 26.x — cek nodejs.org untuk LTS terbaru)
+curl -fsSL https://deb.nodesource.com/setup_26.x | sudo -E bash -
 sudo apt install -y nodejs
 
 # 2. Install PM2 (process manager)

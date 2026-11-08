@@ -226,7 +226,7 @@ export class MetaWhatsAppProvider implements NotificationProvider {
     private accessToken: string,
     private phoneNumberId: string,
     private templates: Record<string, string>,
-    private apiVersion = 'v20.0'
+    private apiVersion = 'v26.0'   // cek versi terbaru di changelog Meta
   ) {}
 
   isConfigured(): boolean {

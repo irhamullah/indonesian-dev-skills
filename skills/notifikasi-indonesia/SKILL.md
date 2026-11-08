@@ -7,9 +7,11 @@ description: Use when sending notifications via WhatsApp (Fonnte, Wablas, Watzap
 
 ## Overview
 
-Kirim notifikasi ke user Indonesia via channel yang benar-benar mereka pakai: **WhatsApp** (dominan), **Telegram** (internal/alert), dan **Email** (formal/transaksional). Skill ini mengatasi pain point: banyak pilihan WhatsApp gateway dengan API berbeda-beda, dan tidak ada abstraksi yang konsisten antara WA/Telegram/Email.
-
-**Approach:** Unified `NotificationChannel` interface + adapters per provider. Business logic provider-agnostic.
+Kirim notifikasi ke user Indonesia via channel yang benar-benar mereka pakai:
+**WhatsApp** (dominan), **Telegram** (internal/alert), dan **Email**
+(formal/transaksional). Satu interface `NotificationProvider` + adapter per
+provider, sehingga business logic tetap provider-agnostic dan gateway bisa
+diganti tanpa mengubah alur bisnis.
 
 ## When to Use
 
@@ -19,26 +21,38 @@ Kirim notifikasi ke user Indonesia via channel yang benar-benar mereka pakai: **
 - Email transaksional (invoice, reset password)
 - Multi-channel fallback (WA → SMS → Email)
 - Migrasi antar WhatsApp gateway (Fonnte ↔ Wablas ↔ official)
+- Trigger: "kirim WhatsApp", "WA gateway", "Fonnte", "Wablas", "OTP WhatsApp",
+  "Telegram bot notif", "kirim email dari aplikasi", "alert ke WhatsApp/Telegram"
 
-**Jangan pakai kalau:**
-- Payment webhook (lihat `payment-gateway-indonesia`)
-- Push notification mobile (FCM/APNs) - berbeda
+**Jangan pakai kalau:** payment webhook (lihat `payment-gateway-indonesia`) atau
+push notification mobile (FCM/APNs) — keduanya berbeda.
+
+## Router
+
+| Topik / tugas | Berkas |
+| --- | --- |
+| WhatsApp gateway: Fonnte, Wablas, Watzap, Meta Cloud API, normalisasi nomor, anti-ban | `references/whatsapp-gateway.md` |
+| Telegram bot: setup, chat_id, HTML, inline buttons, webhook, alert server | `references/telegram-bot.md` |
+| Email: Gmail SMTP, Nodemailer, template HTML, SPF/DKIM/DMARC, Resend | `references/email-notification.md` |
+| OTP flow, security rules, template pesan, opt-in/consent | `references/otp-and-templates.md` |
+| Perbandingan channel/provider, biaya, decision tree, migration path | `references/provider-comparison.md` |
+| Anti-pattern: kode salah vs benar (hardcode provider, OTP lemah, log sensitif) | `references/anti-patterns.md` |
+| Adapter lengkap semua provider, service orchestrator, factory, `.env` | `examples.md` |
 
 ## Core Principles
 
-### Prinsip 1: Channel Abstraction
-
-Satu interface untuk semua channel. Business logic tidak tahu detail provider.
+1. **Channel abstraction.** Satu interface `NotificationProvider` untuk semua
+   channel; business logic tidak boleh tahu detail provider.
+2. **Pilih channel sesuai konteks.** OTP/transaksional → WhatsApp, alert internal
+   → Telegram, dokumen formal → Email, marketing → WhatsApp dengan opt-in wajib.
+3. **Official vs unofficial.** Unofficial (Fonnte/Wablas/Watzap) murah dan cepat
+   tapi nomor bisa di-ban; official (Meta Cloud API) aman untuk produksi/high
+   volume. Selalu siapkan fallback.
+4. **Idempotency & rate limit.** Jangan kirim OTP berulang untuk request yang
+   sama; batasi maksimal 3 OTP per 5 menit per nomor.
 
 ```typescript
-// Bad: Business logic tahu detail provider
-if (channel === 'fonnte') {
-  await axios.post('https://api.fonnte.com/send', { ... });
-} else if (channel === 'telegram') {
-  await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, { ... });
-}
-
-// Good: Provider-agnostic
+// Business logic cukup begini — provider dipilih lewat config
 await notifier.send({
   channel: 'whatsapp',
   to: '+6281234567890',
@@ -47,275 +61,37 @@ await notifier.send({
 });
 ```
 
-### Prinsip 2: Pilih Channel Sesuai Konteks
-
-```
-OTP / verifikasi     → WhatsApp (delivery rate tinggi di ID)
-Notif transaksional  → WhatsApp + Email (redundansi)
-Alert internal       → Telegram (gratis, cepat, kaya fitur)
-Dokumen formal       → Email (invoice, kontrak)
-Marketing            → WhatsApp (opt-in wajib)
-```
-
-### Prinsip 3: WhatsApp Official vs Unofficial
-
-| Jenis | Contoh | Risiko Ban | Biaya | Kapan pakai |
-|-------|--------|------------|-------|-------------|
-| **Official (Meta Cloud API)** | Meta, via BSP (Twilio, Qontak) | ✅ Aman | Per-conversation | Produksi serius, high volume |
-| **Unofficial gateway** | Fonnte, Wablas, Watzap, Woowa | ⚠️ Bisa kena ban | Murah/flat | MVP, internal, low volume |
-
-⚠️ **Unofficial = nomor bisa di-ban WhatsApp** kalau kirim spam/high volume. Selalu siapkan fallback.
-
-### Prinsip 4: Idempotency & Rate Limit
-
-```typescript
-// Jangan kirim OTP berkali-kali untuk request yang sama
-// Rate limit per nomor: max 3 OTP per 5 menit
-```
-
 ## Workflow
 
-### Step 1: Define Unified Interface
-
-```typescript
-// types/notification.ts
-
-export type NotificationChannel = 'whatsapp' | 'telegram' | 'email';
-
-export interface NotificationRequest {
-  channel: NotificationChannel;
-  to: string;                    // +62812... | chat_id | email
-  template?: string;             // template name
-  message?: string;              // raw message (jika tanpa template)
-  data?: Record<string, string>; // template variables
-  priority?: 'high' | 'normal';
-}
-
-export interface NotificationResult {
-  success: boolean;
-  messageId?: string;
-  channel: NotificationChannel;
-  error?: string;
-}
-
-export interface NotificationProvider {
-  send(request: NotificationRequest): Promise<NotificationResult>;
-  isConfigured(): boolean;
-}
-```
-
-### Step 2: Implement Adapters
-
-```typescript
-// adapters/whatsapp-fonnte.adapter.ts
-
-export class FonnteWhatsAppProvider implements NotificationProvider {
-  constructor(private token: string, private sender?: string) {}
-
-  isConfigured(): boolean {
-    return !!this.token;
-  }
-
-  async send(request: NotificationRequest): Promise<NotificationResult> {
-    try {
-      const response = await axios.post(
-        'https://api.fonnte.com/send',
-        new URLSearchParams({
-          target: normalizePhone(request.to),
-          message: this.renderMessage(request),
-          ...(this.sender && { countryCode: '62' }),
-        }),
-        {
-          headers: { Authorization: this.token },
-        }
-      );
-
-      return {
-        success: response.data.status === true,
-        messageId: response.data.id?.[0]?.toString(),
-        channel: 'whatsapp',
-      };
-    } catch (error: any) {
-      return { success: false, channel: 'whatsapp', error: error.message };
-    }
-  }
-
-  private renderMessage(request: NotificationRequest): string {
-    if (request.message) return request.message;
-    return renderTemplate(request.template!, request.data || {});
-  }
-}
-```
-
-**See `examples.md`** for full adapters: Fonnte, Wablas, Watzap, Meta Cloud API, Telegram, Email.
-
-### Step 3: Notification Service (Orchestrator)
-
-```typescript
-// notification.service.ts
-
-export class NotificationService {
-  private providers: Map<NotificationChannel, NotificationProvider> = new Map();
-  private templates: TemplateEngine;
-
-  registerProvider(channel: NotificationChannel, provider: NotificationProvider) {
-    this.providers.set(channel, provider);
-  }
-
-  async send(request: NotificationRequest): Promise<NotificationResult> {
-    const provider = this.providers.get(request.channel);
-    if (!provider?.isConfigured()) {
-      return { success: false, channel: request.channel, error: `${request.channel} not configured` };
-    }
-
-    const result = await provider.send(request);
-
-    // Log untuk observability (tanpa data sensitif)
-    logger.info('notification.sent', {
-      channel: request.channel,
-      template: request.template,
-      success: result.success,
-      recipient: maskRecipient(request.to),
-    });
-
-    return result;
-  }
-}
-```
-
-### Step 4: Multi-Channel Fallback
-
-```typescript
-async function sendCriticalNotification(user: User, payload: NotificationPayload) {
-  const channels: NotificationChannel[] = ['whatsapp', 'email'];
-
-  for (const channel of channels) {
-    const to = channel === 'email' ? user.email : user.phone;
-    if (!to) continue;
-
-    const result = await notifier.send({ channel, to, ...payload });
-    if (result.success) return result;
-  }
-
-  throw new Error('All notification channels failed');
-}
-```
-
-### Step 5: OTP Flow
-
-```typescript
-async function sendOTP(phone: string, purpose: string) {
-  // 1. Rate limit
-  const key = `otp:${phone}`;
-  const attempts = await redis.incr(key);
-  if (attempts === 1) await redis.expire(key, 300);  // 5 min window
-  if (attempts > 3) throw new Error('Terlalu banyak permintaan OTP. Coba lagi nanti.');
-
-  // 2. Generate OTP (crypto-secure!)
-  const code = crypto.randomInt(100000, 999999).toString();
-
-  // 3. Store with TTL
-  await redis.set(`otp:code:${phone}`, await hash(code), 'EX', 300);
-
-  // 4. Send via WhatsApp
-  await notifier.send({
-    channel: 'whatsapp',
-    to: phone,
-    template: 'otp',
-    data: { code, minutes: '5' },
-  });
-
-  return { sent: true, ttl: 300 };
-}
-```
-
-**See `references/otp-and-templates.md`** for full OTP verification & template management.
-
-### Step 6: Configuration
-
-```bash
-# .env
-
-# WhatsApp - Fonnte
-WA_PROVIDER=fonnte
-FONNTE_TOKEN=xxx
-
-# WhatsApp - Wablas (alternative)
-WABLAS_TOKEN=xxx
-
-# WhatsApp - Meta Cloud API (official)
-META_WA_TOKEN=xxx
-META_WA_PHONE_ID=xxx
-
-# Telegram
-TELEGRAM_BOT_TOKEN=xxx
-
-# Email (SMTP)
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=notif@yourdomain.com
-SMTP_PASS=app-password
-```
+1. Petakan kebutuhan ke channel (OTP, transaksional, internal, formal, marketing).
+   → detail: `references/provider-comparison.md`
+2. Pilih provider dan pahami aturannya (24h window, template approval, risiko ban).
+   → detail: `references/whatsapp-gateway.md`
+3. Definisikan `NotificationRequest`/`NotificationProvider` dan
+   `NotificationService` sebagai orchestrator.
+   → detail: `examples.md`
+4. Implement adapter per provider (Fonnte, Wablas, Watzap, Meta, Telegram, Email).
+   → detail: `examples.md`
+5. Susun template terpusat dan flow OTP yang aman (hash, TTL, max attempts).
+   → detail: `references/otp-and-templates.md`
+6. Isi konfigurasi via environment variable dan wiring factory per channel.
+   → detail: `examples.md`
+7. Tambahkan fallback multi-channel dan logging tanpa data sensitif.
+   → detail: `references/anti-patterns.md`
 
 ## Anti-Patterns
 
-### ❌ Hardcode Provider di Business Logic
+- Hardcode provider di business logic (`fonnte.sendWA(...)`) — pakai `notifier.send()`.
+- Kirim WA marketing tanpa opt-in → ban + ilegal.
+- OTP pakai `Math.random()` — wajib `crypto.randomInt()`.
+- Simpan OTP plaintext — hash dulu (bcrypt) dengan TTL.
+- Tidak ada fallback saat WA gagal.
+- Log nomor/OTP penuh — selalu mask.
+- Pakai Gmail SMTP untuk produksi volume tinggi.
+- Email tanpa SPF/DKIM/DMARC, layout flexbox, atau tanpa plain-text fallback.
+- Blast pesan identik ke banyak nomor tanpa personalisasi (risiko ban unofficial).
 
-```typescript
-// Bad
-await fonnte.sendWA(order.userPhone, 'Pesanan dikirim');
-
-// Good
-await notifier.send({ channel: 'whatsapp', to: order.userPhone, template: 'order_shipped', data: {...} });
-```
-
-### ❌ Kirim WA Marketing Tanpa Opt-in
-
-```typescript
-// Bad: Blast ke nomor yang tidak opt-in → ban + illegal
-// Good: Cek consent dulu
-if (user.whatsappOptIn) await notifier.send({ ... });
-```
-
-### ❌ OTP pakai Math.random()
-
-```typescript
-// Bad: Predictable
-const code = Math.floor(Math.random() * 900000 + 100000);
-
-// Good: Crypto-secure
-const code = crypto.randomInt(100000, 999999).toString();
-```
-
-### ❌ Simpan OTP Plaintext
-
-```typescript
-// Bad: OTP plaintext di DB/Redis
-await redis.set(`otp:${phone}`, code);
-
-// Good: Hash
-await redis.set(`otp:${phone}`, await bcrypt.hash(code, 10), 'EX', 300);
-```
-
-### ❌ Tidak ada Fallback
-
-```typescript
-// Bad: WA gagal → notif tidak terkirim
-await whatsapp.send(...);
-
-// Good: Fallback ke email
-if (!result.success) await email.send(...);
-```
-
-### ❌ Log Nomor/Data Penuh
-
-```typescript
-// Bad
-logger.info('OTP sent to +6281234567890 with code 123456');
-
-// Good
-logger.info('OTP sent', { phone: maskPhone(phone) });
-```
+Detail kode salah/benar: `references/anti-patterns.md`.
 
 ## Verification
 
@@ -334,15 +110,17 @@ logger.info('OTP sent', { phone: maskPhone(phone) });
 
 ## References
 
-- `references/whatsapp-gateway.md` - Fonnte, Wablas, Watzap, Meta Cloud API
-- `references/telegram-bot.md` - Telegram Bot API setup & usage
-- `references/email-notification.md` - SMTP/Gmail & transactional email
-- `references/otp-and-templates.md` - OTP flow & message templates
-- `references/provider-comparison.md` - Perbandingan & rekomendasi
+- `references/whatsapp-gateway.md` — Fonnte, Wablas, Watzap, Meta Cloud API, normalisasi nomor, rate limit & anti-ban.
+- `references/telegram-bot.md` — setup @BotFather, chat_id, HTML vs Markdown, inline buttons, webhook, alert server.
+- `references/email-notification.md` — Gmail SMTP, Nodemailer, template HTML, deliverability (SPF/DKIM/DMARC), Resend.
+- `references/otp-and-templates.md` — OTP flow lengkap, security rules, idempotency, template & renderer, opt-in.
+- `references/provider-comparison.md` — perbandingan channel/provider, biaya, decision tree, hybrid strategy, migration.
+- `references/anti-patterns.md` — contoh kode salah vs benar untuk semua jebakan umum.
+- `examples.md` — adapter lengkap semua provider, service orchestrator, fallback, factory, `.env`.
 
 ## Related Skills
 
-- `payment-gateway-indonesia` - Notifikasi status pembayaran
-- `hosting-deployment-indonesia` - Alert server ke Telegram/WhatsApp
-- `security-and-hardening` - Rate limiting, secret management
-- `observability-and-instrumentation` - Logging & delivery monitoring
+- `payment-gateway-indonesia` — Notifikasi status pembayaran
+- `hosting-deployment-indonesia` — Alert server ke Telegram/WhatsApp
+- `security-and-hardening` — Rate limiting, secret management
+- `observability-and-instrumentation` — Logging & delivery monitoring

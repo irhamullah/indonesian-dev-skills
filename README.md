@@ -5,11 +5,11 @@
 **Skill bundle untuk semua AI coding agent** (Claude Code, OpenAI Codex, Cursor, Gemini CLI, VS Code, OpenCode) — dibangun khusus untuk alur kerja developer Indonesia.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.4.0-blue.svg)](CHANGELOG.md)
-[![Skills](https://img.shields.io/badge/skills-5-green.svg)](#-skills-included)
+[![Version](https://img.shields.io/badge/version-1.5.0-blue.svg)](CHANGELOG.md)
+[![Skills](https://img.shields.io/badge/skills-6-green.svg)](#-skills-included)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-*Payment gateway lokal · Deploy VPS Indonesia · Data & formulir Indonesia · Notifikasi · Data resmi & aturan 2026 — siap pakai, production-ready.*
+*Payment gateway lokal · Deploy VPS Indonesia · Data & formulir Indonesia · Notifikasi · Data resmi & aturan 2026 · Pelindungan data pribadi (UU PDP) — siap pakai, production-ready.*
 
 </div>
 
@@ -24,6 +24,7 @@ Developer Indonesia menghadapi **pain point unik** yang tidak dicakup skill bund
 - 📋 Validasi **NIK/NPWP**, wilayah administratif, format nomor HP, ongkir, Rupiah, timezone WIB/WITA/WIT
 - 📲 Notifikasi via **WhatsApp** (Fonnte, Wablas, Watzap, Meta Cloud API), Telegram, dan Email
 - 🧾 **Data resmi** (BMKG, BPS, Bank Indonesia, Bapanas, Kemenag) & **aturan berperiode 2026** (PTKP, PPh 21 TER, PPN, BPJS, UMP) dalam registry JSON yang divalidasi otomatis
+- 🛡️ **Pelindungan data pribadi** sesuai UU 27/2022 (UU PDP) & PP 33/2026 — consent, hak subjek data, notifikasi kebocoran 3×24 jam, sanksi
 
 Semua skill **100% dibuat dari pain point nyata**, bukan repackage skill umum. Solusi **production-ready** dengan contoh implementasi lengkap, bukan sekadar konsep.
 
@@ -38,6 +39,7 @@ Semua skill **100% dibuat dari pain point nyata**, bukan repackage skill umum. S
 | 3 | **Indonesian Data & Forms** | Wilayah administratif, NIK/NPWP, nomor HP (+62), ongkir (RajaOngkir/Biteship), Rupiah, timezone |
 | 4 | **Notifikasi Indonesia** | WhatsApp (Fonnte, Wablas, Watzap, Meta Cloud API), Telegram, Email — OTP aman, fallback multi-channel |
 | 5 | **Data Resmi Indonesia** | BMKG, BPS, Bank Indonesia (JISDOR/kurs), Bapanas, hari libur, kalender Hijriah/Jawa, jadwal sholat, direktori, aturan 2026 |
+| 6 | **Pelindungan Data Pribadi** | UU 27/2022 (UU PDP) & PP 33/2026 — dasar pemrosesan, hak subjek data, notifikasi insiden 3×24 jam, DPA, transfer lintas negara, sanksi |
 
 ### Detail Skill
 
@@ -123,6 +125,23 @@ Semua skill **100% dibuat dari pain point nyata**, bukan repackage skill umum. S
 > 🔑 **Keunggulan skill #5:** aturan berperiode angka-angka ada di **registry JSON** (`references/aturan/`), bukan di prosa. Validator memastikan setiap angka punya `sumber` + `diverifikasi_pada` dan tidak bocor ke teks.
 </details>
 
+<details>
+<summary><b>6. Pelindungan Data Pribadi</b> — UU 27/2022 & PP 33/2026</summary>
+
+**Solves:**
+- ✅ Identifikasi data pribadi (umum vs spesifik) & dasar pemrosesan yang sah
+- ✅ Hak subjek data: informasi, akses, perbaikan, penghapusan, pembatasan, portabilitas, keberatan
+- ✅ Kewajiban pengendali/prosesor, termasuk kontrak DPA & transfer data lintas negara
+- ✅ Prosedur notifikasi kebocoran data dalam **3×24 jam** (Pasal 46)
+- ✅ Matriks risiko sanksi (administratif hingga 2% pendapatan tahunan; pidana)
+
+**Use when:** aplikasimu memproses data pribadi pengguna Indonesia dan wajib patuh UU 27/2022 & PP 33/2026 — consent flow, privacy policy, hak subjek data, respons kebocoran, kontrak prosesor, transfer lintas negara.
+
+**Files:** `SKILL.md` (router) · `references/konsep-dasar.md` · `references/hak-subjek-data.md` · `references/kewajiban-pengendali-prosesor.md` · `references/notifikasi-insiden.md` · `references/sanksi.md`
+
+> 🔑 **Keunggulan skill #6:** ditulis di atas **fakta hukum terverifikasi** (UU 27/2022, PP 33/2026 berlaku 16 Jan 2027), menerjemahkan hukum privasi abstrak menjadi checklist engineering yang konkret.
+</details>
+
 ---
 
 ## 🚀 Instalasi
@@ -166,6 +185,7 @@ Trigger skill langsung dari chat OpenCode, misalnya:
 "Kirim OTP WhatsApp"
 "Jadwal sholat hari ini"
 "Berapa PPh 21 TER untuk penghasilan 15 juta?"
+"Implementasikan consent flow UU PDP"
 ```
 
 ---
@@ -262,13 +282,21 @@ cat ~/.config/opencode/indonesian-dev-skills/AGENTS.md >> ~/.config/opencode/AGE
 
 ---
 
-## 🧪 Menjalankan Validator (Skill #5)
+## 🧪 Menjalankan Validator (Skill #5 & #6)
+
+Skill #5 (data resmi) punya validator registry:
 
 ```bash
 node skills/data-resmi-indonesia/scripts/validate-registry.mjs
 ```
 
 Harapkan exit code `0`. Jalankan tiap kali mengubah/menambah aturan di `references/aturan/*.json`.
+
+Semua skill (termasuk #6) divalidasi oleh validator frontmatter/link:
+
+```bash
+node scripts/validate-skills.mjs
+```
 
 ---
 
@@ -304,9 +332,9 @@ Kontribusi sangat diterima! Punya pain point developer Indonesia lain yang belum
 ## 📊 Project Stats
 
 ```
-Skills    : 5 (masing-masing SKILL.md + examples/references)
+Skills    : 6 (masing-masing SKILL.md + examples/references)
 Struktur  : skills/<nama-skill>/{SKILL.md, examples.md, references/}
-Validator  : skills/data-resmi-indonesia/scripts/validate-registry.mjs
+Validator  : skills/data-resmi-indonesia/scripts/validate-registry.mjs (+ scripts/validate-skills.mjs)
 Lisensi   : MIT
 ```
 
@@ -327,19 +355,22 @@ Lisensi   : MIT
     ├── hosting-deployment-indonesia/
     ├── indonesian-data-forms/
     ├── notifikasi-indonesia/
-    └── data-resmi-indonesia/
+    ├── data-resmi-indonesia/
+    │   ├── SKILL.md
+    │   ├── examples.md
+    │   ├── references/data/    # panduan per topik
+    │   ├── references/aturan/  # registry JSON 2026
+    │   └── scripts/validate-registry.mjs
+    └── pelindungan-data-pribadi/
         ├── SKILL.md
-        ├── examples.md
-        ├── references/data/    # panduan per topik
-        ├── references/aturan/  # registry JSON 2026
-        └── scripts/validate-registry.mjs
+        └── references/         # panduan kepatuhan PDP
 ```
 
 ---
 
 ## 🆚 Versi & Changelog
 
-Lihat [`CHANGELOG.md`](CHANGELOG.md) untuk riwayat lengkap. Versi terbaru: **v1.4.0**.
+Lihat [`CHANGELOG.md`](CHANGELOG.md) untuk riwayat lengkap. Versi terbaru: **v1.5.0**.
 
 ---
 

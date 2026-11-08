@@ -8,6 +8,17 @@ Panduan lengkap WhatsApp gateway: unofficial (Fonnte, Wablas, Watzap) dan offici
 
 ## Official vs Unofficial
 
+### Ringkasan Cepat
+
+| Jenis | Contoh | Risiko Ban | Biaya | Kapan pakai |
+|-------|--------|------------|-------|-------------|
+| **Official (Meta Cloud API)** | Meta, via BSP (Twilio, Qontak) | ✅ Aman | Per-conversation | Produksi serius, high volume |
+| **Unofficial gateway** | Fonnte, Wablas, Watzap, Woowa | ⚠️ Bisa kena ban | Murah/flat | MVP, internal, low volume |
+
+⚠️ **Unofficial = nomor bisa di-ban WhatsApp** kalau kirim spam/high volume. Selalu siapkan fallback.
+
+### Perbandingan Detail
+
 | Aspek | Unofficial Gateway | Official (Meta Cloud API) |
 |-------|-------------------|---------------------------|
 | **Contoh** | Fonnte, Wablas, Watzap, Woowa, Ruangwa | Meta, via BSP (Twilio, Qontak, Wati) |

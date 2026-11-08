@@ -236,6 +236,27 @@ function validateNPWPChecksum(digits: string): boolean {
 }
 ```
 
+### NPWP Normalization Helper
+
+```typescript
+export function normalizeNPWP(npwp: string): string {
+  // Strip all non-digits
+  const digits = npwp.replace(/\D/g, '');
+
+  if (digits.length === 15) {
+    // Format: XX.XXX.XXX.X-XXX.XXX
+    return `${digits.slice(0,2)}.${digits.slice(2,5)}.${digits.slice(5,8)}.${digits.slice(8,9)}-${digits.slice(9,12)}.${digits.slice(12,15)}`;
+  }
+
+  if (digits.length === 16) {
+    // New format: same as NIK
+    return digits;
+  }
+
+  throw new Error('NPWP harus 15 atau 16 digit');
+}
+```
+
 ### Format for Display
 
 ```typescript
@@ -283,6 +304,17 @@ const userSchema = z.object({
   nik: nikSchema,
   npwp: npwpSchema.optional(),
   name: z.string().min(1),
+});
+```
+
+Schema ringkas untuk boundary input:
+
+```typescript
+// Validation before storing
+const schema = z.object({
+  nik: z.string().regex(/^\d{16}$/).refine(isValidNIKStructure),
+  phone: z.string().transform(normalizePhone).refine(isValidPhone),
+  npwp: z.string().transform(normalizeNPWP).optional(),
 });
 ```
 
@@ -452,6 +484,16 @@ logger.info(`Processing user ${user.nik}`);
 
 // Good: Mask it
 logger.info(`Processing user ${maskNIK(user.nik)}`);
+```
+
+### ❌ Trust Client-Side Validation Only
+
+```typescript
+// Bad: Client validation bisa di-bypass
+if (isValidNIK(req.body.nik)) { save(); }
+
+// Good: Validate server-side juga
+if (isValidNIK(req.body.nik) && validateNIKServer(req.body.nik)) { save(); }
 ```
 
 ---

@@ -5,6 +5,20 @@ All notable changes to Indonesian Developer Skills will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-11-08
+
+### Added
+- **Pelindungan Data Pribadi (PDP)** skill (#6)
+  - Patuh UU 27/2022 (UU PDP) & PP 33/2026 (berlaku 16 Januari 2027)
+  - Konsep dasar: data umum vs spesifik, dasar pemrosesan (lawful basis), asas
+  - Hak subjek data: informasi, akses, perbaikan, penghapusan, pembatasan, portabilitas, keberatan
+  - Kewajiban pengendali & prosesor, DPA, transfer data lintas negara
+  - Notifikasi insiden kebocoran data dalam 3×24 jam (Pasal 46)
+  - Sanksi administratif (hingga 2% pendapatan tahunan) & pidana — matriks risiko
+  - 5 referensi: konsep dasar, hak subjek data, kewajiban, notifikasi insiden, sanksi
+- README.en.md (versi Inggris lengkap)
+- Penyegaran dokumen repo untuk rilis v1.5.0 (README, AGENTS, QUICKSTART)
+
 ## [1.4.0] - 2026-11-08
 
 ### Added
@@ -69,7 +83,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive testing guides
 - Security best practices
 
-[Unreleased]: https://github.com/irhamullah/indonesian-dev-skills/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/irhamullah/indonesian-dev-skills/compare/v1.5.0...HEAD
+[1.5.0]: https://github.com/irhamullah/indonesian-dev-skills/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/irhamullah/indonesian-dev-skills/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/irhamullah/indonesian-dev-skills/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/irhamullah/indonesian-dev-skills/compare/v1.1.0...v1.2.0

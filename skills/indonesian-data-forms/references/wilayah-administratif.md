@@ -49,6 +49,16 @@ Provinsi (38)          Kode BPS: 2 digit   Contoh: 32 = Jawa Barat
 
 **Recommendation:** Local JSON dataset with monthly refresh job.
 
+### Ringkasan Kapan Pakai
+
+| Strategy | Kapan pakai | Trade-off |
+|----------|-------------|-----------|
+| **API (wilayah.id, emsifa)** | Always-connected apps, butuh selalu fresh | Network dependency, rate limit |
+| **Local dataset + periodic update** | Offline capable, high traffic | Perlu update berkala |
+| **Seeded DB table** | Full control, custom wilayah | Perlu maintenance sendiri |
+
+**Recommendation:** Local dataset (BPS-based) dengan periodic refresh script.
+
 ---
 
 ## Option 1: API Integration
@@ -379,6 +389,27 @@ WHERE district_code = '3204010'
 Satu kode pos bisa cover beberapa kelurahan, dan satu kelurahan bisa punya beberapa kode pos.
 
 **Handle:** Kode pos adalah attribute kelurahan, bukan identifier.
+
+---
+
+## Jangan Hardcode Daftar Wilayah
+
+```typescript
+// Bad: Hardcoded list (will be outdated)
+const provinces = ['DKI Jakarta', 'Jawa Barat', ...];  // Outdated!
+
+// Good: From API or maintained dataset
+const provinces = await wilayahAPI.getProvinces();
+```
+
+Anti-pattern yang sama untuk daftar kota:
+
+```typescript
+// Bad
+const cities = ['Jakarta', 'Bandung', ...];  // Outdated
+
+// Good: From maintained source
+```
 
 ---
 

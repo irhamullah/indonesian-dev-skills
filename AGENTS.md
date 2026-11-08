@@ -13,6 +13,7 @@ Copy tabel di bawah ini ke `~/.config/opencode/AGENTS.md`, tambahkan ke section 
 | Validasi NIK/NPWP, wilayah administratif (provinsi/kota/kecamatan/kelurahan), format nomor HP (+62), ongkir (RajaOngkir/Biteship), format Rupiah, timezone WIB/WITA/WIT | `indonesian-data-forms` |
 | Kirim notifikasi WhatsApp/Telegram/Email, WA gateway (Fonnte, Wablas, Watzap, Meta Cloud API), Telegram Bot, OTP WhatsApp, email transaksional, alert server | `notifikasi-indonesia` |
 | Data resmi Indonesia: BMKG (gempa/cuaca/nowcast), BPS, Bank Indonesia (JISDOR/kurs), Bapanas (harga pangan), hari libur & cuti bersama, kalender Hijriah/Jawa, jadwal sholat, direktori sekolah/RS/kampus, aturan pajak (PTKP/PPh 21 TER/PPN), BPJS, UMP | `data-resmi-indonesia` |
+| Pelindungan data pribadi: UU 27/2022 (UU PDP), PP 33/2026, consent flow, privacy policy, hak subjek data, notifikasi kebocoran data 3×24 jam, DPA/processor contract, transfer data lintas negara, sanksi (2% pendapatan tahunan) | `pelindungan-data-pribadi` |
 
 ---
 
@@ -55,6 +56,7 @@ cat >> ~/.config/opencode/AGENTS.md << 'EOF'
 | Validasi NIK/NPWP, wilayah administratif (provinsi/kota/kecamatan/kelurahan), format nomor HP (+62), ongkir (RajaOngkir/Biteship), format Rupiah, timezone WIB/WITA/WIT | `indonesian-data-forms` |
 | Kirim notifikasi WhatsApp/Telegram/Email, WA gateway (Fonnte, Wablas, Watzap, Meta Cloud API), Telegram Bot, OTP WhatsApp, email transaksional, alert server | `notifikasi-indonesia` |
 | Data resmi Indonesia: BMKG (gempa/cuaca/nowcast), BPS, Bank Indonesia (JISDOR/kurs), Bapanas (harga pangan), hari libur & cuti bersama, kalender Hijriah/Jawa, jadwal sholat, direktori sekolah/RS/kampus, aturan pajak (PTKP/PPh 21 TER/PPN), BPJS, UMP | `data-resmi-indonesia` |
+| Pelindungan data pribadi: UU 27/2022 (UU PDP), PP 33/2026, consent flow, privacy policy, hak subjek data, notifikasi kebocoran data 3×24 jam, DPA/processor contract, transfer data lintas negara, sanksi (2% pendapatan tahunan) | `pelindungan-data-pribadi` |
 <!-- /indonesian-dev-skills -->
 EOF
 ```
@@ -125,6 +127,7 @@ When multiple skills could apply, Indonesian Developer Skills has **domain-speci
 3. If task mentions **NIK/NPWP/wilayah/ongkir/Rupiah** → `indonesian-data-forms` first
 4. If task mentions **WhatsApp/Telegram/OTP/notifikasi** → `notifikasi-indonesia` first
 5. If task mentions **data resmi Indonesia** (BMKG/BPS/BI/Bapanas/hari libur/kalender/pajak/BPJS/UMP) → `data-resmi-indonesia` first
+6. If task mentions **pelindungan data pribadi** (UU PDP/PP 33/2026/consent/privacy/hak subjek/notifikasi kebocoran/DPA/transfer lintas negara/sanksi) → `pelindungan-data-pribadi` first
 
 Example:
 ```
@@ -248,6 +251,9 @@ All skills complete:
 
 ### 5. Data Resmi Indonesia ✅
 **Trigger:** "Hari libur nasional 2026", "Gempa BMKG", "Prakiraan cuaca", "JISDOR", "Kurs BI", "Harga pangan", "Kalender Hijriah", "Jadwal sholat", "UMP 2026", "PPh 21 TER", "PTKP"
+
+### 6. Pelindungan Data Pribadi ✅
+**Trigger:** "Implementasikan consent flow UU PDP", "Privacy policy Indonesia", "Notifikasi kebocoran data", "Hak subjek data", "DPA processor", "Transfer data lintas negara", "Sanksi UU PDP"
 
 **Want to contribute a new skill?** See CONTRIBUTING.md
 

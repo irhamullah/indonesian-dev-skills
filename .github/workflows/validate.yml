@@ -1,0 +1,31 @@
+name: Validate skills
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Validate Agent Skills frontmatter & relative links
+        run: node scripts/validate-skills.mjs
+
+      - name: Validate periodic rule registry
+        run: node skills/data-resmi-indonesia/scripts/validate-registry.mjs
+
+      - name: Test registry validator
+        run: node --test skills/data-resmi-indonesia/scripts/validate-registry.test.mjs

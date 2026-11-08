@@ -1,0 +1,23 @@
+{
+  "aturan": "PTKP tahunan per status wajib pajak",
+  "jenis": "daftar",
+  "dasar_hukum": "PMK 101/PMK.010/2016",
+  "berlaku_dari": "2026-01-01",
+  "berlaku_sampai": "2026-12-31",
+  "sumber": "https://pajak.go.id/id/penghasilan-tidak-kena-pajak",
+  "diverifikasi_pada": "2026-11-08",
+  "entri": [
+    { "kunci": "TK/0", "nilai": 54000000, "satuan": "IDR/tahun" },
+    { "kunci": "TK/1", "nilai": 58500000, "satuan": "IDR/tahun" },
+    { "kunci": "TK/2", "nilai": 63000000, "satuan": "IDR/tahun" },
+    { "kunci": "TK/3", "nilai": 67500000, "satuan": "IDR/tahun" },
+    { "kunci": "K/0", "nilai": 58500000, "satuan": "IDR/tahun" },
+    { "kunci": "K/1", "nilai": 63000000, "satuan": "IDR/tahun" },
+    { "kunci": "K/2", "nilai": 67500000, "satuan": "IDR/tahun" },
+    { "kunci": "K/3", "nilai": 72000000, "satuan": "IDR/tahun" },
+    { "kunci": "K/I/0", "nilai": 112500000, "satuan": "IDR/tahun" },
+    { "kunci": "K/I/1", "nilai": 117000000, "satuan": "IDR/tahun" },
+    { "kunci": "K/I/2", "nilai": 121500000, "satuan": "IDR/tahun" },
+    { "kunci": "K/I/3", "nilai": 126000000, "satuan": "IDR/tahun" }
+  ]
+}

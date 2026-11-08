@@ -1,0 +1,13 @@
+{
+  "aturan": "Tarif PPN",
+  "jenis": "bracket",
+  "dasar_hukum": "PMK 131/2024 jo. UU 7/2021",
+  "berlaku_dari": "2026-01-01",
+  "berlaku_sampai": "2026-12-31",
+  "sumber": "https://pajak.go.id/id/artikel/pmk-1312024-tarif-ppn-sebelas-dua-belas",
+  "diverifikasi_pada": "2026-11-08",
+  "kategori": {
+    "umum": [{ "batas_atas": null, "tarif": 0.11 }],
+    "mewah": [{ "batas_atas": null, "tarif": 0.12 }]
+  }
+}
